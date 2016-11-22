@@ -1,5 +1,9 @@
-#include "Functions_Nov_20_2016.h"
-
+/*
+	angle > 0 && speed > 0 >>> clockwise
+	angle > 0 && speed < 0 >>> counterclockwise
+	angle < 0 && speed > 0 >>> counterclockwise
+	angle < 0 && speed < 0 >>> clockwise
+*/
 void turnDegrees(float angle , int speed){ // 11.5^2 + 14.75^2 = c^2
 	nMotorEncoder[leftDrive] = 0;
 	nMotorEncoder[rightDrive] = 0;
@@ -20,6 +24,14 @@ void turnDegrees(float angle , int speed){ // 11.5^2 + 14.75^2 = c^2
 }
 
 
+
+
+/*
+	distance > 0 && speed > 0 >>> extend
+	distance > 0 && speed < 0 >>> retract
+	distance < 0 && speed > 0 >>> retract
+	distance < 0 && speed < 0 >>> extend
+*/
 void driveInches(float distance, int speed) {
 	nMotorEncoder[leftDrive] = 0;
 	nMotorEncoder[rightDrive] = 0;
@@ -39,6 +51,15 @@ void driveInches(float distance, int speed) {
   motor[rightDrive] = 0;
 }
 
+
+
+
+/*
+	distance > 0 && speed > 0 >>> forward
+	distance > 0 && speed < 0 >>> backward
+	distance < 0 && speed > 0 >>> backward
+	distance < 0 && speed < 0 >>> forward
+*/
 void extendBoomInches(float distance, int speed) {
 	nMotorEncoder[lift] = 0;
 	speed = distance < 0 ? -speed :  speed;
@@ -49,6 +70,11 @@ void extendBoomInches(float distance, int speed) {
 	motor[lift] = 0;
 }
 
+
+
+
+/*
+*/
 void moveForkliftDegrees(float angle, int speed) {
 	nMotorEncoder[forklift] = 0;
 	speed = angle < 0 ? -speed :  speed;

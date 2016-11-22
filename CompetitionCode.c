@@ -15,25 +15,32 @@
 #pragma userControlDuration(120)
 
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
-//#include "Functions_Nov_20_2016.c"
-#include "Tasks_Nov_20_2016.c"
+
+//Supporting Files
+#include <Functions.c>
+#include <Tasks.c>
 
 //Variables
 int maxSpeed = 128;
+
+
 
 void pre_auton() {
   bStopTasksBetweenModes = true;
 }
 
+
+
 task autonomous() {
-	//startTask(forwardBackward); //Either
-	startTask(forwardBackwardCubeLeftStart); //Blue
+	startTask(forwardBackward); //Either
+	//startTask(forwardBackwardCubeLeftStart); //Blue
 	//startTask(forwardBackwardCubeRightStart); //Red
 }
 
+
+
 task usercontrol() {
 
-	//nMotorEncoder[lift] = 14 / (0.5 * PI) * 627.2;
 	nMotorEncoder[lift] = 0;
 
 	while(true) {
@@ -42,8 +49,10 @@ task usercontrol() {
 			nMotorEncoder[lift] = 0;
 		}
 
-		motor[leftDrive] = abs(vexRT[Ch3]) >= 4 ? vexRT[Ch3] * (maxSpeed / 128.0) : 0; //left side speed is determined by the left joystick
-		motor[rightDrive] = abs(vexRT[Ch2]) >= 4 ? vexRT[Ch2] * (maxSpeed / 128.0) : 0; //right side speed is determined by the right joystick
+		motor[leftDrive] = vexRT[Ch3] * (maxSpeed / 128.0);
+		motor[rightDrive] = vexRT[Ch2] * (maxSpeed / 128.0);
+		//motor[leftDrive] = abs(vexRT[Ch3]) >= 4 ? vexRT[Ch3] * (maxSpeed / 128.0) : 0; //left side speed is determined by the left joystick
+		//motor[rightDrive] = abs(vexRT[Ch2]) >= 4 ? vexRT[Ch2] * (maxSpeed / 128.0) : 0; //right side speed is determined by the right joystick
 
 		if(vexRT[Btn7U]) { //If button 7U is pressed
 			motor[forklift] = 128;
