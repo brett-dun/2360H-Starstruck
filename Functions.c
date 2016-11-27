@@ -76,11 +76,14 @@ void extendBoomInches(float distance, int speed) {
 /*
 */
 void moveForkliftDegrees(float angle, int speed) {
-	nMotorEncoder[forklift] = 0;
+	nMotorEncoder[leftForklift] = 0;
+	nMotorEncoder[rightForklift] = 0;
 	speed = angle < 0 ? -speed :  speed;
 	const float ticks = abs((angle/360.0) * 5 * 627.2);
 	do {
-		motor[forklift] = speed;
-	} while(abs(nMotorEncoder[forklift]) < ticks);
-	motor[forklift] = 0;
+		motor[leftForklift] = speed;
+		motor[rightForklift] = speed;
+	} while(abs(nMotorEncoder[leftForklift]) < ticks);
+	motor[leftForklift] = 0;
+	motor[rightForklift] = 0;
 }
