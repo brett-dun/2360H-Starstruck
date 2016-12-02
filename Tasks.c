@@ -3,42 +3,42 @@ task bringBoomHome() {
 	wait1Msec(320);
 	motor[lift] = 0;
 }
-task auto1() {
+task extendBoom() { //All
 	extendBoomInches(7, 127);
 }
-task auto2() {
+task either() { //ForwardBackward
 	//driveInches(4*sqrt(24*24*2), 127);
-	driveInches(3*24, 127);
+	driveInches(3*24, -127);
 	delay(1000);
-	driveInches(18, -127);
+	driveInches(18, 127);
 	startTask(bringBoomHome);
 }
-task auto3() {
-	driveInches(3*24, 127);
-	driveInches(2*24, -127);
-	turnDegrees(90, 127);
+task rightTurn() {
+	driveInches(3*24, -127);
+	driveInches(2*24, 127);
+	turnDegrees(135, 127);
 	startTask(bringBoomHome);
 	driveInches(2.5*24, 127);
 }
-task auto4() {
-	driveInches(3*24, 127);
-	driveInches(2*24, -127);
-	turnDegrees(-80, 127);
+task leftTurn() {
+	driveInches(3*24, -127);
+	driveInches(2*24, 127);
+	turnDegrees(-135, 127);
 	startTask(bringBoomHome);
-	driveInches(2.5*24, 127);
+	driveInches(2.*24, 127);
 }
 task forwardBackward() {
 	extendBoomInches(7, 127);
-	startTask(auto1);
-	startTask(auto2);
+	startTask(extendBoom);
+	startTask(either);
 }
 task forwardBackwardCubeLeftStart() {
 	extendBoomInches(7, 127);
-	startTask(auto1);
-	startTask(auto3);
+	startTask(extendBoom);
+	startTask(rightTurn);
 }
 task forwardBackwardCubeRightStart() {
-	extendBoomInches(7, 127);
-	startTask(auto1);
-	startTask(auto4);
+	extendBoomInches(6.5, 127);
+	startTask(extendBoom);
+	startTask(leftTurn);
 }
