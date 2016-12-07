@@ -1,4 +1,8 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
+#pragma config(Sensor, dgtl1,  limitSwitch,    sensorDigitalIn)
+#pragma config(Sensor, dgtl2,  led2,           sensorNone)
+#pragma config(Sensor, dgtl3,  led3,           sensorNone)
+#pragma config(Sensor, dgtl4,  led4,           sensorNone)
 #pragma config(Sensor, dgtl12, claw,           sensorDigitalOut)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
@@ -34,7 +38,18 @@ void pre_auton() {
 
 
 task autonomous() {
-	startTask(forwardBackward); //Either
+	if(limitSwitch) {
+		rightStart();
+		SensorValue[led2] = 1;
+		SensorValue[led3] = 1;
+		SensorValue[led4] = 1;
+	} else {
+		startTask(forwardBackward);
+		SensorValue[led2] = 0;
+		SensorValue[led3] = 0;
+		SensorValue[led4] = 0;
+	}
+	//startTask(forwardBackward); //Either
 	//startTask(forwardBackwardCubeLeftStart); //Blue
 	//startTask(forwardBackwardCubeRightStart); //Red
 }
@@ -91,6 +106,16 @@ task usercontrol() {
 	nMotorEncoder[lift] = 0;
 
 	while(true) {
+
+		if(limitSwitch) {
+			SensorValue[led2] = 1;
+			SensorValue[led3] = 1;
+			SensorValue[led4] = 1;
+		} else {
+			SensorValue[led2] = 0;
+			SensorValue[led3] = 0;
+			SensorValue[led4] = 0;
+		}
 
 		if(vexRT[Btn5UXmtr2] && vexRT[Btn5DXmtr2]) {
 			nMotorEncoder[lift] = 0;
