@@ -9,8 +9,8 @@ void turnDegrees(float angle , int speed){ // 11.5^2 + 14.75^2 = c^2
 	nMotorEncoder[rightDrive] = 0;
 	speed = angle < 0 ? -speed : speed;
 	const float ticks = abs((angle / 360) * (sqrt(pow(11.5,2) + pow(14.75,2)) / 4) * 392);
-	motor[leftDrive] = speed;
-	motor[rightDrive] = -speed;
+	motor[leftDrive] = -speed;
+	motor[rightDrive] = speed;
 	do{
 		if(abs(nMotorEncoder[leftDrive]) >= ticks) {
 			motor[leftDrive] = 0;
@@ -100,11 +100,11 @@ void rightStart() {
 	//Forward - push the first star over
 	driveInches(48,128);
 	//Backward
-	driveInches(-24,128);
+	/*driveInches(-24,128);
 	//Angle Right
 	turnDegrees(25,64);
 	//Forward - push the second star over
-	driveInches(24/sinDegrees(25),128);
+	//driveInches(24/sinDegrees(25),128);
 	//Backward
 	driveInches(-24/sinDegrees(25),128);
 	//Angle Right
@@ -149,5 +149,5 @@ void rightStart() {
 	//Open Claw - release the stars
 	SensorValue[claw] = 0;
 	//Back
-	driveInches(-36,128);
+	driveInches(-36,128);*/
 }
