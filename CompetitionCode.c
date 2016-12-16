@@ -3,7 +3,8 @@
 #pragma config(Sensor, dgtl2,  led2,           sensorDigitalOut)
 #pragma config(Sensor, dgtl3,  led3,           sensorDigitalOut)
 #pragma config(Sensor, dgtl4,  led4,           sensorDigitalOut)
-#pragma config(Sensor, dgtl12, claw,           sensorDigitalOut)
+#pragma config(Sensor, dgtl10, mechStop,       sensorDigitalOut)
+#pragma config(Sensor, dgtl11, claw,           sensorDigitalOut)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_3,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
@@ -149,6 +150,12 @@ task usercontrol() {
 			SensorValue[claw] = 1;
 		} else if(vexRT[Btn5D]) {
 			SensorValue[claw] = 0;
+		}
+
+		if(vexRT[Btn6UXmtr2]) {
+			SensorValue[mechStop] = 1;
+		} else if(vexRT[Btn6DXmtr2]) {
+			SensorValue[mechStop] = 0;
 		}
 
 	}
