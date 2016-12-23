@@ -69,17 +69,17 @@ task autonomous() {
 			5U && 5D	Claw Control
 				5U -> Open claw
 				5D -> Close Claw
-			6U && 6D	Variable Drive Speed Control
-				6U -> 128 maxSpeed
-				6D -> 32 maxSpeed
+			6U && 6D [None]
+				6U ->
+				6D ->
 			7U && 7L && 7R && 7D	Forklift Control
 				7U -> Raise Forklift
 				7L && 7R -> Stop Forklift
 				7D -> Lower Forklift
-			8U && 8L && 8R && 8D [None]
-				8U ->
-				8L && 8R ->
-				8D ->
+			8U && 8L && 8R && 8D Variable Drive Speed Control
+				8U -> 128 maxSpeed
+				8L && 8R -> 64 maxSpeed
+				8D -> 32 maxSpeed
 
 		Partner Controller
 		------------------
@@ -112,12 +112,11 @@ task usercontrol() {
 		SensorValue[led3] = SensorValue[limitSwitch];
 		SensorValue[led4] = SensorValue[limitSwitch];
 
-		if(vexRT[Btn5UXmtr2] && vexRT[Btn5DXmtr2]) {
-			nMotorEncoder[lift] = 0;
-		}
-		if(vexRT[Btn6U]) {
+		if(vexRT[Btn8U]) {
 			maxSpeed = 128; //Change the maximum speed to 128 (maximum value)
-		} else if(vexRT[Btn6D]) {
+		} else if(vexRT[Btn8L] || vexRT[Btn8R]) {
+			maxSpeed = 64;
+		} else if(vexRT[Btn8D]) {
 			maxSpeed = 32; //Change the maximum speed to 32 (1/4 of the maximum value)
 		}
 
@@ -137,6 +136,18 @@ task usercontrol() {
 			motor[rightForklift] = -32;
 		}
 
+		if(vexRT[Btn5U]) {
+			SensorValue[claw] = 1;
+		} else if(vexRT[Btn5D]) {
+			SensorValue[claw] = 0;
+		}
+
+
+
+		if(vexRT[Btn5UXmtr2] && vexRT[Btn5DXmtr2]) {
+			nMotorEncoder[lift] = 0;
+	}
+
 		if(vexRT[Btn7UXmtr2] && !(abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 627.2)) {
 			motor[lift] = 128;
 		} else if(vexRT[Btn7DXmtr2]) {
@@ -144,12 +155,6 @@ task usercontrol() {
 		}
 		if(vexRT[Btn7LXmtr2] || vexRT[Btn7RXmtr2] || abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 627.2) {
 			motor[lift] = 0;
-		}
-
-		if(vexRT[Btn5U]) {
-			SensorValue[claw] = 1;
-		} else if(vexRT[Btn5D]) {
-			SensorValue[claw] = 0;
 		}
 
 		if(vexRT[Btn6UXmtr2]) {
