@@ -1,10 +1,10 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
 #pragma config(Sensor, dgtl1,  limitSwitch,    sensorDigitalIn)
-#pragma config(Sensor, dgtl2,  led2,           sensorDigitalOut)
-#pragma config(Sensor, dgtl3,  led3,           sensorDigitalOut)
-#pragma config(Sensor, dgtl4,  led4,           sensorDigitalOut)
+#pragma config(Sensor, dgtl2,  leftSonar,      sensorSONAR_inch)
+#pragma config(Sensor, dgtl4,  rightSonar,     sensorSONAR_inch)
 #pragma config(Sensor, dgtl10, mechStop,       sensorDigitalOut)
 #pragma config(Sensor, dgtl11, claw,           sensorDigitalOut)
+#pragma config(Sensor, dgtl12, led,            sensorDigitalOut)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_3,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
@@ -24,6 +24,7 @@
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
 
 //Supporting Files
+#include<BaseFunctions.c>
 #include <Functions.c>
 #include <Tasks.c>
 
@@ -39,17 +40,15 @@ void pre_auton() {
 
 
 task autonomous() {
-	if(SensorValue[limitSwitch]) {
-		SensorValue[led2] = 1;
-		SensorValue[led3] = 1;
-		SensorValue[led4] = 1;
+	/*if(SensorValue[limitSwitch]) {
+		SensorValue[led] = 1;
 		rightStart();
 	} else {
-		SensorValue[led2] = 0;
-		SensorValue[led3] = 0;
-		SensorValue[led4] = 0;
+		SensorValue[led] = 0;
 		startTask(forwardBackward);
-	}
+	}*/
+	//driveInches(40);
+	turnDegrees(90);
 	//startTask(forwardBackward); //Either
 	//startTask(forwardBackwardCubeLeftStart); //Blue
 	//startTask(forwardBackwardCubeRightStart); //Red
@@ -108,9 +107,9 @@ task usercontrol() {
 
 	while(true) {
 
-		SensorValue[led2] = SensorValue[limitSwitch];
-		SensorValue[led3] = SensorValue[limitSwitch];
-		SensorValue[led4] = SensorValue[limitSwitch];
+		SensorValue[led] = SensorValue[limitSwitch];
+		//SensorValue[led3] = SensorValue[limitSwitch];
+		//SensorValue[led4] = SensorValue[limitSwitch];
 
 		if(vexRT[Btn8U]) {
 			maxSpeed = 128; //Change the maximum speed to 128 (maximum value)
@@ -125,7 +124,7 @@ task usercontrol() {
 		//motor[leftDrive] = abs(vexRT[Ch3]) >= 4 ? vexRT[Ch3] * (maxSpeed / 128.0) : 0; //left side speed is determined by the left joystick
 		//motor[rightDrive] = abs(vexRT[Ch2]) >= 4 ? vexRT[Ch2] * (maxSpeed / 128.0) : 0; //right side speed is determined by the right joystick
 
-		 if(vexRT[Btn7L] || vexRT[Btn7R]) { //If buttons 7L or 7R are pressed
+		 /*if(vexRT[Btn7L] || vexRT[Btn7R]) { //If buttons 7L or 7R are pressed
 			motor[leftForklift] = 0;
 			motor[rightForklift] = 0;
 		} else if(vexRT[Btn7U]) { //If button 7U is pressed
@@ -134,7 +133,18 @@ task usercontrol() {
 		} else if(vexRT[Btn7D]) { //If button 7D is pressed
 			motor[leftForklift] = -32;
 			motor[rightForklift] = -32;
+		}*/
+		if(!vexRT[Btn6U] && !vexRT[Btn6D]) {
+			motor[leftForklift] = 0;
+			motor[rightForklift] = 0;
+		} if(vexRT[Btn6U]) {
+			motor[leftForklift] = 128;
+			motor[rightForklift] = 128;
+		} else if(vexRT[Btn6D]) {
+		 	motor[leftForklift] = -32;
+			motor[rightForklift] = -32;
 		}
+
 
 		if(vexRT[Btn5U]) {
 			SensorValue[claw] = 1;
