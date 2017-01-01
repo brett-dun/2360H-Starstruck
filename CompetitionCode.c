@@ -1,7 +1,9 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
-#pragma config(Sensor, dgtl1,  limitSwitch,    sensorDigitalIn)
-#pragma config(Sensor, dgtl2,  leftSonar,      sensorSONAR_inch)
-#pragma config(Sensor, dgtl4,  rightSonar,     sensorSONAR_inch)
+#pragma config(Sensor, dgtl1,  rightButton,    sensorTouch)
+#pragma config(Sensor, dgtl2,  leftButton,     sensorTouch)
+#pragma config(Sensor, dgtl3,  limitSwitch,    sensorDigitalIn)
+#pragma config(Sensor, dgtl4,  leftSonar,      sensorSONAR_inch)
+#pragma config(Sensor, dgtl6,  rightSonar,     sensorSONAR_inch)
 #pragma config(Sensor, dgtl10, mechStop,       sensorDigitalOut)
 #pragma config(Sensor, dgtl11, claw,           sensorDigitalOut)
 #pragma config(Sensor, dgtl12, led,            sensorDigitalOut)
@@ -25,8 +27,7 @@
 
 //Supporting Files
 #include<BaseFunctions.c>
-#include <Functions.c>
-#include <Tasks.c>
+#include <Autonomous.c>
 
 //Variables
 int maxSpeed = 128;
@@ -40,15 +41,15 @@ void pre_auton() {
 
 
 task autonomous() {
-	/*if(SensorValue[limitSwitch]) {
+	if(SensorValue[limitSwitch]) {
 		SensorValue[led] = 1;
 		rightStart();
 	} else {
 		SensorValue[led] = 0;
-		startTask(forwardBackward);
-	}*/
+		eitherStart();
+	}
 	//driveInches(40);
-	turnDegrees(90);
+	//turnDegrees(90);
 	//startTask(forwardBackward); //Either
 	//startTask(forwardBackwardCubeLeftStart); //Blue
 	//startTask(forwardBackwardCubeRightStart); //Red
@@ -68,13 +69,13 @@ task autonomous() {
 			5U && 5D	Claw Control
 				5U -> Open claw
 				5D -> Close Claw
-			6U && 6D [None]
-				6U ->
-				6D ->
-			7U && 7L && 7R && 7D	Forklift Control
-				7U -> Raise Forklift
-				7L && 7R -> Stop Forklift
-				7D -> Lower Forklift
+			6U && 6D Forklift Control
+				6U -> Raise Forklift
+				6D -> Lower Forklift
+			7U && 7L && 7R && 7D  [None]
+				7U ->
+				7L && 7R ->
+				7D ->
 			8U && 8L && 8R && 8D Variable Drive Speed Control
 				8U -> 128 maxSpeed
 				8L && 8R -> 64 maxSpeed
@@ -89,9 +90,9 @@ task autonomous() {
 			4	[None]
 		Buttons:
 			5U && 5D	Lift Encoder Reset <<<We either need to remove this or get a partner controller for the claw.>>>
-			6U && 6D	[None]
-				6U ->
-				6D ->
+			6U && 6D  Mechanical Stop Control
+				6U -> Engage Mechanical Stop
+				6D -> Disengage Mechanical Stop
 			7U && 7L && 7R && 7D	Lift Control
 				7U -> Extend Lift
 				7L && 7R -> Stop Lift
@@ -108,8 +109,6 @@ task usercontrol() {
 	while(true) {
 
 		SensorValue[led] = SensorValue[limitSwitch];
-		//SensorValue[led3] = SensorValue[limitSwitch];
-		//SensorValue[led4] = SensorValue[limitSwitch];
 
 		if(vexRT[Btn8U]) {
 			maxSpeed = 128; //Change the maximum speed to 128 (maximum value)
@@ -163,7 +162,7 @@ task usercontrol() {
 		} else if(vexRT[Btn7DXmtr2]) {
 			motor[lift] = -128;
 		}
-		if(vexRT[Btn7LXmtr2] || vexRT[Btn7RXmtr2] || abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 627.2) {
+		if(vexRT[Btn7LXmtr2] || vexRT[Btn7RXmtr2] || abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 392) {
 			motor[lift] = 0;
 		}
 
