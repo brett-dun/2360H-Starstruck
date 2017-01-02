@@ -3,7 +3,7 @@
 #pragma config(Sensor, dgtl2,  leftButton,     sensorTouch)
 #pragma config(Sensor, dgtl3,  limitSwitch,    sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  leftSonar,      sensorSONAR_inch)
-#pragma config(Sensor, dgtl6,  rightSonar,     sensorSONAR_inch)
+#pragma config(Sensor, dgtl6,  rightSonar,     sensorSOpNAR_inch)
 #pragma config(Sensor, dgtl10, mechStop,       sensorDigitalOut)
 #pragma config(Sensor, dgtl11, claw,           sensorDigitalOut)
 #pragma config(Sensor, dgtl12, led,            sensorDigitalOut)
@@ -26,7 +26,8 @@
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
 
 //Supporting Files
-#include<BaseFunctions.c>
+#include <BaseFunctions.c>
+#include <AdvancedFunctions.c>
 #include <Autonomous.c>
 
 //Variables
@@ -48,11 +49,6 @@ task autonomous() {
 		SensorValue[led] = 0;
 		eitherStart();
 	}
-	//driveInches(40);
-	//turnDegrees(90);
-	//startTask(forwardBackward); //Either
-	//startTask(forwardBackwardCubeLeftStart); //Blue
-	//startTask(forwardBackwardCubeRightStart); //Red
 }
 
 
@@ -146,16 +142,16 @@ task usercontrol() {
 
 
 		if(vexRT[Btn5U]) {
-			SensorValue[claw] = 1;
+			closeClaw();
 		} else if(vexRT[Btn5D]) {
-			SensorValue[claw] = 0;
+			openClaw();
 		}
 
-
+/*-----------------------------------------------------------------------------------*/
 
 		if(vexRT[Btn5UXmtr2] && vexRT[Btn5DXmtr2]) {
 			nMotorEncoder[lift] = 0;
-	}
+		}
 
 		if(vexRT[Btn7UXmtr2] && !(abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 627.2)) {
 			motor[lift] = 128;
@@ -167,9 +163,9 @@ task usercontrol() {
 		}
 
 		if(vexRT[Btn6UXmtr2]) {
-			SensorValue[mechStop] = 1;
+			engageMechStop();
 		} else if(vexRT[Btn6DXmtr2]) {
-			SensorValue[mechStop] = 0;
+			disengageMechStop();
 		}
 
 	}
