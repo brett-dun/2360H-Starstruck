@@ -1,3 +1,6 @@
+void highHangAlign();
+task extendBoomFull();
+
 //Highly Experimental
 void highHangAlign() {
 
@@ -25,4 +28,8 @@ void highHangAlign() {
 
 task extendBoomFull() {
 	extendBoomInches(17.5);
+}
+
+task raiseForklift() {
+	moveForkliftDegrees(85,128);
 }

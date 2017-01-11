@@ -3,7 +3,7 @@
 #pragma config(Sensor, dgtl2,  leftButton,     sensorTouch)
 #pragma config(Sensor, dgtl3,  limitSwitch,    sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  leftSonar,      sensorSONAR_inch)
-#pragma config(Sensor, dgtl6,  rightSonar,     sensorSOpNAR_inch)
+#pragma config(Sensor, dgtl6,  rightSonar,     sensorSONAR_inch)
 #pragma config(Sensor, dgtl10, mechStop,       sensorDigitalOut)
 #pragma config(Sensor, dgtl11, claw,           sensorDigitalOut)
 #pragma config(Sensor, dgtl12, led,            sensorDigitalOut)

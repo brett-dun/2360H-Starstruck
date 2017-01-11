@@ -1,43 +1,50 @@
 //Right side autonomous
 void rightStart() {
 
+	//Open Claw
+	openClaw();
 	//Move the forklift up to engage the claw
 	moveForkliftDegrees(10,128);
 
-	//Open Claw
-	openClaw();
-	//Lift Claw Up
-	moveForkliftDegrees(40+45,128);
+	delay(100);
+
+	//Close Claw
+	closeClaw();
+
+	delay(100);
+
+	//Raise Forklift
+	startTask(raiseForklift);
 
 	//Forward - push the first star over
-	driveInches(48);
+	driveInches(50);
+	//Open Claw
+	openClaw();
 
 	//Backward
-	driveInches(-24);
+	driveInches(-12);
+	//Lower Claw
+	moveForkliftDegrees(5,-16);
+	//Forward
+	driveInches(12);
+	//Backward
+	driveInches(-12);
 	//Angle Right
 	turnDegrees(25);
 
 	//Forward - push the second star over
-	driveInches(24/sinDegrees(25));
-
+	driveInches(30);
 	//Backward
-	driveInches(-24/sinDegrees(25));
-	//Angle Right
-	turnDegrees(25);
-
-	//Forward - push the third star over
-	driveInches(24/sinDegrees(50));
-	//Backward
-	driveInches(-24/sinDegrees(50));
+	driveInches(-30);
 
 	//Return to Starting Position
-	turnDegrees(-50);
+	turnDegrees(-25);
 	squareRobot(64);
 
 	//Lower Claw
-	moveForkliftDegrees(-50-45,32);
+	moveForkliftDegrees(-85,32);
 	//Forward
-	driveInches(12);
+	/*driveInches(12);
 	//Turn Right
 	turnDegrees(90);
 	//Forward
@@ -68,7 +75,7 @@ void rightStart() {
 	//Open Claw - release the stars
 	openClaw();
 	//Back
-	driveInches(-36);
+	driveInches(-36);*/
 }
 
 //Left Side Autonomous
