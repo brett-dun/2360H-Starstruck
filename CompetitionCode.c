@@ -153,7 +153,7 @@ task usercontrol() {
 			nMotorEncoder[lift] = 0;
 		}
 
-		if(vexRT[Btn7UXmtr2] && !(abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 627.2)) {
+		if(vexRT[Btn7UXmtr2] && !(abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 627.2)) { //The number for encoder ticks may be wrong.
 			motor[lift] = 128;
 		} else if(vexRT[Btn7DXmtr2]) {
 			motor[lift] = -128;

@@ -3,10 +3,8 @@ void rightStart() {
 
 	//Open Claw
 	openClaw();
-	//Move the forklift up to engage the claw
-	moveForkliftDegrees(10,128);
 
-	delay(100);
+	delay(300);
 
 	//Close Claw
 	closeClaw();
