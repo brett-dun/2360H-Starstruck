@@ -158,7 +158,7 @@ task usercontrol() {
 		} else if(vexRT[Btn7DXmtr2]) {
 			motor[lift] = -128;
 		}
-		if(vexRT[Btn7LXmtr2] || vexRT[Btn7RXmtr2] || abs(nMotorEncoder[lift]) >= 17.5 / (0.5 * PI) * 392) {
+		if(vexRT[Btn7LXmtr2] || vexRT[Btn7RXmtr2] || abs(nMotorEncoder[lift]) >= 17 / (0.5 * PI) * 392) {
 			motor[lift] = 0;
 		}
 

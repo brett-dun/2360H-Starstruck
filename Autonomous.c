@@ -76,9 +76,50 @@ void rightStart() {
 	driveInches(-36);*/
 }
 
+
+
 //Left Side Autonomous
 void leftStart() {
+	//Open Claw
+	openClaw();
 
+	delay(300);
+
+	//Close Claw
+	closeClaw();
+
+	delay(100);
+
+	//Raise Forklift
+	startTask(raiseForklift);
+
+	//Forward - push the first star over
+	driveInches(50);
+	//Open Claw
+	openClaw();
+
+	//Backward
+	driveInches(-12);
+	//Lower Claw
+	moveForkliftDegrees(5,-16);
+	//Forward
+	driveInches(12);
+	//Backward
+	driveInches(-12);
+	//Angle Right
+	turnDegrees(-25);
+
+	//Forward - push the second star over
+	driveInches(30);
+	//Backward
+	driveInches(-30);
+
+	//Return to Starting Position
+	turnDegrees(25);
+	squareRobot(64);
+
+	//Lower Claw
+	moveForkliftDegrees(-85,32);
 }
 
 //Autonomous for either side
