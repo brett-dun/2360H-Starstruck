@@ -35,20 +35,19 @@ int maxSpeed = 128;
 
 
 
-void pre_auton() {
-  bStopTasksBetweenModes = true;
-}
+void pre_auton() { bStopTasksBetweenModes = true; }
 
 
 
 task autonomous() {
-	if(SensorValue[limitSwitch]) {
+	/*if(SensorValue[limitSwitch]) {
 		SensorValue[led] = 1;
 		rightStart();
 	} else {
 		SensorValue[led] = 0;
-		eitherStart();
-	}
+		leftStart();
+	}*/
+	rightStart();
 }
 
 
@@ -116,19 +115,7 @@ task usercontrol() {
 
 		motor[leftDrive] = vexRT[Ch2] * (maxSpeed / 128.0);
 		motor[rightDrive] = vexRT[Ch3] * (maxSpeed / 128.0);
-		//motor[leftDrive] = abs(vexRT[Ch3]) >= 4 ? vexRT[Ch3] * (maxSpeed / 128.0) : 0; //left side speed is determined by the left joystick
-		//motor[rightDrive] = abs(vexRT[Ch2]) >= 4 ? vexRT[Ch2] * (maxSpeed / 128.0) : 0; //right side speed is determined by the right joystick
 
-		 /*if(vexRT[Btn7L] || vexRT[Btn7R]) { //If buttons 7L or 7R are pressed
-			motor[leftForklift] = 0;
-			motor[rightForklift] = 0;
-		} else if(vexRT[Btn7U]) { //If button 7U is pressed
-			motor[leftForklift] = 128;
-			motor[rightForklift] = 128;
-		} else if(vexRT[Btn7D]) { //If button 7D is pressed
-			motor[leftForklift] = -32;
-			motor[rightForklift] = -32;
-		}*/
 		if(!vexRT[Btn6U] && !vexRT[Btn6D]) {
 			motor[leftForklift] = 0;
 			motor[rightForklift] = 0;
@@ -136,15 +123,13 @@ task usercontrol() {
 			motor[leftForklift] = 128;
 			motor[rightForklift] = 128;
 		} else if(vexRT[Btn6D]) {
-		 	motor[leftForklift] = -32;
-			motor[rightForklift] = -32;
+		 	motor[leftForklift] = -64;
+			motor[rightForklift] = -64;
 		}
 
 
 		if(vexRT[Btn5U]) {
-			closeClaw();
-		} else if(vexRT[Btn5D]) {
-			openClaw();
+			SensorValue[claw] = !SensorValue[claw];
 		}
 
 /*-----------------------------------------------------------------------------------*/

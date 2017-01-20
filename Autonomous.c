@@ -15,32 +15,32 @@ void rightStart() {
 	startTask(raiseForklift);
 
 	//Forward - push the first star over
-	driveInches(50);
+	driveInches(52.5);
 	//Open Claw
 	openClaw();
 
 	//Backward
-	driveInches(-12);
+	driveInches(-30);
 	//Lower Claw
-	moveForkliftDegrees(5,-16);
+	moveForkliftDegrees(10,-64);
 	//Forward
-	driveInches(12);
+	//driveInches(12);
 	//Backward
-	driveInches(-12);
+	//driveInches(-12);
 	//Angle Right
-	turnDegrees(25);
+	turnDegrees(45);
 
 	//Forward - push the second star over
-	driveInches(30);
+	driveInches(40);
 	//Backward
-	driveInches(-30);
+	driveInches(-24);
 
 	//Return to Starting Position
-	turnDegrees(-25);
+	turnDegrees(-45);
 	squareRobot(64);
 
 	//Lower Claw
-	moveForkliftDegrees(-85,32);
+	moveForkliftDegrees(-85,64);
 	//Forward
 	/*driveInches(12);
 	//Turn Right
@@ -94,32 +94,32 @@ void leftStart() {
 	startTask(raiseForklift);
 
 	//Forward - push the first star over
-	driveInches(50);
+	driveInches(52.5);
 	//Open Claw
 	openClaw();
 
 	//Backward
-	driveInches(-12);
+	driveInches(-30);
 	//Lower Claw
-	moveForkliftDegrees(5,-16);
+	moveForkliftDegrees(10,-64);
 	//Forward
-	driveInches(12);
+	//driveInches(12);
 	//Backward
-	driveInches(-12);
+	//driveInches(-12);
 	//Angle Right
-	turnDegrees(-25);
+	turnDegrees(-45);
 
 	//Forward - push the second star over
-	driveInches(30);
+	driveInches(40);
 	//Backward
-	driveInches(-30);
+	driveInches(-24);
 
 	//Return to Starting Position
-	turnDegrees(25);
+	turnDegrees(-45);
 	squareRobot(64);
 
 	//Lower Claw
-	moveForkliftDegrees(-85,32);
+	moveForkliftDegrees(-85,64);
 }
 
 //Autonomous for either side

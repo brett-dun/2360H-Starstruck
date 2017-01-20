@@ -63,7 +63,7 @@ void driveInches(float distance) {
 	do {
 
 		average = (abs(nMotorEncoder[leftDrive]) + abs(nMotorEncoder[rightDrive])) / 2; //will always be positive
-		speed = atan(0.00125*4*(ticks - average)) / (PI/2) * max;
+		speed = atan(0.00125*8*(ticks - average)) / (PI/2) * max;
 
 		motor[leftDrive] = atan(0.5 *(average-abs(nMotorEncoder[leftDrive]))) / (PI/2) * speed + speed;
 		motor[rightDrive] = atan(0.5 *(average-abs(nMotorEncoder[rightDrive]))) / (PI/2) * speed + speed;
