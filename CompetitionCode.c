@@ -32,7 +32,7 @@
 
 //Variables
 int maxSpeed = 128;
-
+int enableClaw = 1;
 
 
 void pre_auton() { bStopTasksBetweenModes = true; }
@@ -99,12 +99,20 @@ task autonomous() {
 */
 task usercontrol() {
 
+	clearTimer(T1);
+
 	nMotorEncoder[lift] = 0;
+	nMotorEncoder[leftForklift] = 0;
+	const float ticks = abs((100/360.0) * 5 * 627.2);
 
 	while(true) {
 
-		SensorValue[led] = SensorValue[limitSwitch];
+	/*if(abs(nMotorEncoder[leftForklift]) > ticks){
+		motor[leftForklift] = 0;
+		motor[rightForklift] = 0;
+	}*/
 
+		SensorValue[led] = SensorValue[limitSwitch];
 		if(vexRT[Btn8U]) {
 			maxSpeed = 128; //Change the maximum speed to 128 (maximum value)
 		} else if(vexRT[Btn8L] || vexRT[Btn8R]) {
@@ -128,8 +136,14 @@ task usercontrol() {
 		}
 
 
-		if(vexRT[Btn5U]) {
+		if(vexRT[Btn5U] && enableClaw) {
 			SensorValue[claw] = !SensorValue[claw];
+			enableClaw = 0;
+			clearTimer(T1);
+		}
+
+		if(time1(T1) > 250) {
+			enableClaw = 1;
 		}
 
 /*-----------------------------------------------------------------------------------*/

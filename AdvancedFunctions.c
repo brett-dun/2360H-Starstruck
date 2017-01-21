@@ -31,5 +31,8 @@ task extendBoomFull() {
 }
 
 task raiseForklift() {
-	moveForkliftDegrees(95,128);
+	moveForkliftDegrees(90,128);
+}
+task lowerForklift() {
+	moveForkliftDegrees(85,-64);
 }

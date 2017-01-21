@@ -22,29 +22,36 @@ void rightStart() {
 	//Backward
 	driveInches(-30);
 	//Lower Claw
-	moveForkliftDegrees(10,-64);
+	//moveForkliftDegrees(10,-64);
 	//Forward
 	//driveInches(12);
 	//Backward
 	//driveInches(-12);
 	//Angle Right
-	turnDegrees(45);
+	turnDegrees(35);
 
 	//Forward - push the second star over
-	driveInches(40);
+	driveInches(35);
 	//Backward
-	driveInches(-24);
+	driveInches(-35);
 
 	//Return to Starting Position
-	turnDegrees(-45);
-	squareRobot(64);
+	turnDegrees(-140);
+	driveInches(-6);
 
 	//Lower Claw
 	moveForkliftDegrees(-85,64);
 	//Forward
-	/*driveInches(12);
+	driveInches(18);
+	//Close Claw
+	closeClaw();
+	//Turn
+	turnDegrees(65);
+	openClaw();
+	driveInches(-12);
+
 	//Turn Right
-	turnDegrees(90);
+	/*turnDegrees(90);
 	//Forward
 	driveInches(6);
 
@@ -107,12 +114,12 @@ void leftStart() {
 	//Backward
 	//driveInches(-12);
 	//Angle Right
-	turnDegrees(-45);
+	turnDegrees(-35);
 
 	//Forward - push the second star over
 	driveInches(40);
 	//Backward
-	driveInches(-24);
+	driveInches(-40);
 
 	//Return to Starting Position
 	turnDegrees(-45);
