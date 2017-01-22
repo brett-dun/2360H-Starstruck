@@ -31,8 +31,15 @@ task extendBoomFull() {
 }
 
 task raiseForklift() {
-	moveForkliftDegrees(90,128);
+	moveForkliftDegrees(85,128);
 }
 task lowerForklift() {
 	moveForkliftDegrees(85,-64);
+}
+
+task keepForkliftUp() {
+	while(true) {
+		if(nMotorEncoder[leftForklift]) {
+		}
+	}
 }

@@ -4,7 +4,7 @@ void rightStart() {
 	//Open Claw
 	openClaw();
 
-	delay(300);
+	delay(450);
 
 	//Close Claw
 	closeClaw();
@@ -17,10 +17,9 @@ void rightStart() {
 	//Forward - push the first star over
 	driveInches(52.5);
 	//Open Claw
-	openClaw();
 
 	//Backward
-	driveInches(-30);
+	/*driveInches(-30);
 	//Lower Claw
 	//moveForkliftDegrees(10,-64);
 	//Forward
@@ -33,11 +32,14 @@ void rightStart() {
 	//Forward - push the second star over
 	driveInches(35);
 	//Backward
-	driveInches(-35);
+	/*driveInches(-35);
+
+	turnDegrees(-35);
+	squareRobot(64);*/
 
 	//Return to Starting Position
-	turnDegrees(-140);
-	driveInches(-6);
+	/*turnDegrees(-140);
+	driveInches(-12);
 
 	//Lower Claw
 	moveForkliftDegrees(-85,64);
@@ -90,7 +92,7 @@ void leftStart() {
 	//Open Claw
 	openClaw();
 
-	delay(300);
+	delay(450);
 
 	//Close Claw
 	closeClaw();
@@ -106,27 +108,40 @@ void leftStart() {
 	openClaw();
 
 	//Backward
-	driveInches(-30);
+	driveInches(-25);
 	//Lower Claw
-	moveForkliftDegrees(10,-64);
+	//moveForkliftDegrees(10,-64);
 	//Forward
 	//driveInches(12);
 	//Backward
 	//driveInches(-12);
 	//Angle Right
-	turnDegrees(-35);
+	/*turnDegrees(-35);
 
 	//Forward - push the second star over
-	driveInches(40);
+	driveInches(35);
 	//Backward
-	driveInches(-40);
+	driveInches(-35);
 
 	//Return to Starting Position
-	turnDegrees(-45);
-	squareRobot(64);
-
+	turnDegrees(140);*/
+	//driveInches(-12);
+	turnDegrees(125);
+	driveInches(-5)
 	//Lower Claw
-	moveForkliftDegrees(-85,64);
+	moveForkliftDegrees(-105,64);
+	//Forward
+	driveInches(28);
+	//Close Claw
+	closeClaw();
+	delay(100);
+	startTask(raiseForklift);
+	//Turn
+	turnDegrees(-90);
+	moveForkliftDegrees(20,128);
+	driveInches(24.5);
+	openClaw();
+	//driveInches(-12);
 }
 
 //Autonomous for either side
@@ -134,7 +149,22 @@ void eitherStart() {
 
 }
 
-//Programming skills - start on the right
-void programmingSkills() {
+void mAuto() {
+	//Open Claw
+	openClaw();
+
+	delay(1000);
+
+	driveInches(72);
+
+	closeClaw();
+	delay(450);
+
+	turnDegrees(135);
+
+	startTask(raiseForklift);
+	driveInches(43.5);
+
+	openClaw();
 
 }

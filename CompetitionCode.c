@@ -1,7 +1,7 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
 #pragma config(Sensor, dgtl1,  rightButton,    sensorTouch)
 #pragma config(Sensor, dgtl2,  leftButton,     sensorTouch)
-#pragma config(Sensor, dgtl3,  limitSwitch,    sensorDigitalIn)
+#pragma config(Sensor, dgtl3,  jumper,         sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  leftSonar,      sensorSONAR_inch)
 #pragma config(Sensor, dgtl6,  rightSonar,     sensorSONAR_inch)
 #pragma config(Sensor, dgtl10, mechStop,       sensorDigitalOut)
@@ -29,6 +29,7 @@
 #include <BaseFunctions.c>
 #include <AdvancedFunctions.c>
 #include <Autonomous.c>
+#include <ProgrammingSkills.c>
 
 //Variables
 int maxSpeed = 128;
@@ -40,14 +41,15 @@ void pre_auton() { bStopTasksBetweenModes = true; }
 
 
 task autonomous() {
-	/*if(SensorValue[limitSwitch]) {
+	if(SensorValue[jumper]) { //no jumper == 1
 		SensorValue[led] = 1;
 		rightStart();
-	} else {
+		//mAuto();
+	} else { //yes jumper == 0
 		SensorValue[led] = 0;
 		leftStart();
-	}*/
-	rightStart();
+	}
+	//skills3();
 }
 
 
@@ -112,7 +114,8 @@ task usercontrol() {
 		motor[rightForklift] = 0;
 	}*/
 
-		SensorValue[led] = SensorValue[limitSwitch];
+		SensorValue[led] = SensorValue[jumper];
+
 		if(vexRT[Btn8U]) {
 			maxSpeed = 128; //Change the maximum speed to 128 (maximum value)
 		} else if(vexRT[Btn8L] || vexRT[Btn8R]) {
