@@ -1,13 +1,10 @@
 /*	Status of Each Function
 - turnDegrees: working (minor adjustments may be needed to account for friction)
 - driveInches: working (minor adjustments may be needed to account for friction)
-- extendBoomInches: working
 - moveForkliftDegrees: working
 - squareRobot: working
 - openClaw: working
 - closeClaw: working
-- engageMechStop: working
-- disengageMechStop: working
 */
 
 
@@ -21,7 +18,7 @@ void turnDegrees(float angle){
 	nMotorEncoder[rightDrive] = 0;
 
 	const float max = angle < 0 ? -128 : 128;
-	const float ticks = abs((angle / 360) * (sqrt(pow(11.5,2) + pow(14.75,2)) / 4) * 627.2) / 2;
+	const float ticks = abs((angle / 360) * (sqrt(pow(11.5,2) + pow(14.75,2)) / 4) * 392) / 2;
 																						// 11.5^2 + 14.75^2 = c^2
 
 	float average = 0;
@@ -55,7 +52,7 @@ void driveInches(float distance) {
 	nMotorEncoder[rightDrive] = 0;
 
 	const float max = distance < 0 ? -64 : 64;
-	const float ticks = abs(distance / (4 * PI) * 627.2); //will always be positive
+	const float ticks = abs(distance / (4 * PI) * 392); //will always be positive
 
 	float speed = 0;
 	float average = 0;
@@ -76,27 +73,6 @@ void driveInches(float distance) {
 
 
 /*
-	distance > 0 >>> extend
-	distance < 0 >>> retract
-*/
-void extendBoomInches(float distance) {
-
-	nMotorEncoder[lift] = 0;
-	int speed = distance < 0 ? -128 : 128;
-	const float ticks = abs(distance / (0.5 * PI) * 392);
-
-	do {
-
-		motor[lift] = speed;
-
-	} while(abs(nMotorEncoder[lift]) < ticks);
-
-	motor[lift] = 0;
-
-}
-
-
-/*
 	angle > 0 && speed > 0 >>> raise
 	angle > 0 && speed < 0 >>> lower
 	angle < 0 && speed > 0 >>> lower
@@ -104,20 +80,22 @@ void extendBoomInches(float distance) {
 */
 void moveForkliftDegrees(float angle, int speed) {
 
-	nMotorEncoder[leftForklift] = 0;
+	nMotorEncoder[forklift1] = 0;
 	speed = angle < 0 ? -speed : speed;
 
-	const float ticks = abs((angle/360.0) * 5 * 627.2);
+	const float ticks = abs((angle/360.0) * 5 * 392);
 
 	do {
 
-		motor[leftForklift] = speed;
-		motor[rightForklift] = speed;
+		motor[forklift1] = speed;
+		motor[forklift2] = speed;
+		motor[forklift3] = speed;
 
-	} while(abs(nMotorEncoder[leftForklift]) < ticks);
+	} while(abs(nMotorEncoder[forklift1]) < ticks);
 
-	motor[leftForklift] = 0;
-	motor[rightForklift] = 0;
+	motor[forklift1] = 0;
+	motor[forklift2] = 0;
+	motor[forklift3] = 0;
 
 }
 
@@ -154,10 +132,4 @@ void openClaw() {
 }
 void closeClaw() {
 	SensorValue[claw] = 0;
-}
-void engageMechStop() {
-	SensorValue[mechStop] = 1;
-}
-void disengageMechStop() {
-	SensorValue[mechStop] = 0;
 }

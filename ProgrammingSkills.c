@@ -1,5 +1,4 @@
-void skills()
-{
+/*void skills() {
 	//-Push the first star over
 
 	//Open Claw
@@ -21,13 +20,13 @@ void skills()
 	//turns 180 degrees
 	turnDegrees(180);
 	//Lowers forkLift
-	startTask(lowerForkLift);
+	startTask(lowerForklift);
 	//forward
 	driveInches(19);
 	//Close claw
 	closeClaw();
 	//raises forkLift
-	startTask(raiseForkLift);
+	startTask(raiseForklift);
 	//drive backwards
 	driveInches(-30);
 	//turns 180 degrees
@@ -100,10 +99,10 @@ void skills()
 
 	//turn to the left and get the starts near the fence in the center
 
-	//and dump them so that the stars in the middle fall*/
-}
+	//and dump them so that the stars in the middle fall
+}*/
 
-void skills2() {
+/*void skills2() {
 	//Open Claw
 	openClaw();
 
@@ -160,7 +159,7 @@ void skills2() {
 	driveInches(-20);
 	turnDegrees(150);
 	squareRobot(64);
-}
+}*/
 
 void skills3() {
 	//Open Claw

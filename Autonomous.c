@@ -127,7 +127,7 @@ void leftStart() {
 	turnDegrees(140);*/
 	//driveInches(-12);
 	turnDegrees(125);
-	driveInches(-5)
+	driveInches(-5);
 	//Lower Claw
 	moveForkliftDegrees(-105,64);
 	//Forward
@@ -145,7 +145,7 @@ void leftStart() {
 }
 
 //Autonomous for either side
-void eitherStart() {
+/*void eitherStart() {
 
 }
 
@@ -167,4 +167,4 @@ void mAuto() {
 
 	openClaw();
 
-}
+}*/
