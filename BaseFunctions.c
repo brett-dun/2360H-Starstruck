@@ -18,7 +18,7 @@ void turnDegrees(float angle){
 	nMotorEncoder[rightDrive] = 0;
 
 	const float max = angle < 0 ? -128 : 128;
-	const float ticks = abs((angle / 360) * (sqrt(pow(11.5,2) + pow(14.75,2)) / 4) * 392) / 2;
+	const float ticks = abs((angle / 360) * (sqrt(pow(11.5,2) + pow(14.75,2)) / 4) * 627.2) / 2;
 																						// 11.5^2 + 14.75^2 = c^2
 
 	float average = 0;
@@ -52,7 +52,7 @@ void driveInches(float distance) {
 	nMotorEncoder[rightDrive] = 0;
 
 	const float max = distance < 0 ? -64 : 64;
-	const float ticks = abs(distance / (4 * PI) * 392); //will always be positive
+	const float ticks = abs(distance / (4 * PI) * 627.2); //will always be positive
 
 	float speed = 0;
 	float average = 0;
@@ -80,22 +80,20 @@ void driveInches(float distance) {
 */
 void moveForkliftDegrees(float angle, int speed) {
 
-	nMotorEncoder[forklift1] = 0;
+	nMotorEncoder[leftForklift] = 0;
 	speed = angle < 0 ? -speed : speed;
 
-	const float ticks = abs((angle/360.0) * 5 * 392);
+	const float ticks = abs((angle/360.0) * 5 * 627.2);
 
 	do {
 
-		motor[forklift1] = speed;
-		motor[forklift2] = speed;
-		motor[forklift3] = speed;
+		motor[leftForklift] = speed;
+		motor[rightForklift] = speed;
 
-	} while(abs(nMotorEncoder[forklift1]) < ticks);
+	} while(abs(nMotorEncoder[leftForklift]) < ticks);
 
-	motor[forklift1] = 0;
-	motor[forklift2] = 0;
-	motor[forklift3] = 0;
+	motor[leftForklift] = 0;
+	motor[rightForklift] = 0;
 
 }
 
