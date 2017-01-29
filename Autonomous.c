@@ -110,21 +110,20 @@ void leftStart() {
 	//Backward
 	driveInches(-25);
 	//Lower Claw
-	//moveForkliftDegrees(10,-64);
+	moveForkliftDegrees(10,-64);
 	//Forward
 	//driveInches(12);
 	//Backward
 	//driveInches(-12);
 	//Angle Right
-	/*turnDegrees(-35);
+	//turnDegrees(-35);
 
 	//Forward - push the second star over
-	driveInches(35);
+	//driveInches(35);
 	//Backward
-	driveInches(-35);
-
+	//driveInches(-35);
 	//Return to Starting Position
-	turnDegrees(140);*/
+	turnDegrees(140);
 	//driveInches(-12);
 	turnDegrees(125);
 	driveInches(-5);
@@ -141,7 +140,7 @@ void leftStart() {
 	moveForkliftDegrees(20,128);
 	driveInches(24.5);
 	openClaw();
-	//driveInches(-12);
+	//driveInches(-12);*/
 }
 
 //Autonomous for either side

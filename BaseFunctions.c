@@ -80,20 +80,22 @@ void driveInches(float distance) {
 */
 void moveForkliftDegrees(float angle, int speed) {
 
-	nMotorEncoder[leftForklift] = 0;
+	nMotorEncoder[forklift1] = 0;
 	speed = angle < 0 ? -speed : speed;
 
 	const float ticks = abs((angle/360.0) * 5 * 627.2);
 
 	do {
 
-		motor[leftForklift] = speed;
-		motor[rightForklift] = speed;
+		motor[forklift1] = speed;
+		motor[forklift2] = speed;
+		motor[forklift3] = speed;
 
-	} while(abs(nMotorEncoder[leftForklift]) < ticks);
+	} while(abs(nMotorEncoder[forklift1]) < ticks);
 
-	motor[leftForklift] = 0;
-	motor[rightForklift] = 0;
+	motor[forklift1] = 0;
+	motor[forklift2] = 0;
+	motor[forklift3] = 0;
 
 }
 
