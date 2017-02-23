@@ -1,7 +1,5 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
-#pragma config(Sensor, dgtl1,  rightButton,    sensorTouch)
-#pragma config(Sensor, dgtl2,  leftButton,     sensorTouch)
-#pragma config(Sensor, dgtl3,  jumper,         sensorDigitalIn)
+#pragma config(Sensor, dgtl10, jumper,         sensorDigitalIn)
 #pragma config(Sensor, dgtl11, claw,           sensorDigitalOut)
 #pragma config(Sensor, dgtl12, led,            sensorDigitalOut)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
@@ -25,15 +23,12 @@
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
 
 //Supporting Files
-#include <BaseFunctions.c>
-#include <AdvancedFunctions.c>
-#include <Autonomous.c>
-#include <ProgrammingSkills.c>
 #include <recorder.c>
 #include <data.c>
 #include <playback.c>
 
 //Variables
+//static int *dataSet = NULL;
 int maxSpeed = 128;
 int enableClaw = 1;
 
@@ -44,15 +39,13 @@ void pre_auton() { bStopTasksBetweenModes = true; }
 
 task autonomous() {
 	if(SensorValue[jumper]) { //no jumper == 1
+		runLeft = true;
 		SensorValue[led] = 1;
 		playback();
-		//rightStart();
-		//mAuto();
 	} else { //yes jumper == 0
+		runLeft = false;
 		SensorValue[led] = 0;
-		leftStart();
 	}
-	//skills3();
 }
 
 
@@ -83,7 +76,7 @@ task autonomous() {
 */
 task usercontrol() {
 
-	//startTask(record);
+	startTask(record);
 
 	clearTimer(T1);
 
