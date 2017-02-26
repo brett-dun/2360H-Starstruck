@@ -1,14 +1,16 @@
+#include <PrimaryData.c> //Primary autonomous -
+//#include <SecondaryData.c> //Secondary autonomous -
+
 void left();
 void right();
-static bool runLeft;
+
 
 void playback() {
 
-	if(runLeft)
+	if(SensorValue[jumper])
 		left();
 	else
 		right();
-
 
 	motor[leftDrive] = 0;
 	motor[rightDrive] = 0;
@@ -17,6 +19,7 @@ void playback() {
 	motor[forklift3] = 0;
 
 }
+
 
 void left() {
 
@@ -32,11 +35,11 @@ void left() {
 	//Loop through this 100 times a second for n number of seconds
 	for(int i = 0; i < 100 * 15; i++) {
 
-		leftJoystick = data[i][0];
-		rightJoystick = data[i][1];
-		button5U = data[i][2] / 100;
-		button6U = (data[i][2] / 10) % 10;
-		button6D = data[i][2] % 10;
+		leftJoystick = leftData[i][0];
+		rightJoystick = leftData[i][1];
+		button5U = leftData[i][2] / 100;
+		button6U = (leftData[i][2] / 10) % 10;
+		button6D = leftData[i][2] % 10;
 
 		motor[leftDrive] = leftJoystick;
 		motor[rightDrive] = rightJoystick;
@@ -85,11 +88,11 @@ void right() {
 	//Loop through this 100 times a second for n number of seconds
 	for(int i = 0; i < 100 * 15; i++) {
 
-		leftJoystick = data2[i][0];
-		rightJoystick = data2[i][1];
-		button5U = data2[i][2] / 100;
-		button6U = (data2[i][2] / 10) % 10;
-		button6D = data2[i][2] % 10;
+		leftJoystick = rightData[i][0];
+		rightJoystick = rightData[i][1];
+		button5U = rightData[i][2] / 100;
+		button6U = (rightData[i][2] / 10) % 10;
+		button6D = rightData[i][2] % 10;
 
 		motor[leftDrive] = leftJoystick;
 		motor[rightDrive] = rightJoystick;

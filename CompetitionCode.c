@@ -22,32 +22,28 @@
 
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
 
+
 //Supporting Files
-#include <recorder.c>
-#include <data.c>
-#include <playback.c>
+#include <Recorder.c>
+#include <Playback.c>
+//#include <SkillsPlayback.c>
+//#include <SkillsRecorder.c>
+
 
 //Variables
-//static int *dataSet = NULL;
-int maxSpeed = 128;
-int enableClaw = 1;
+int maxSpeed = 128; //the robot will start with its maximum speed
+int enableClaw = 1; //the claw is ready to be used
 
 
 void pre_auton() { bStopTasksBetweenModes = true; }
 
 
-
 task autonomous() {
-	if(SensorValue[jumper]) { //no jumper == 1
-		runLeft = true;
-		SensorValue[led] = 1;
-		playback();
-	} else { //yes jumper == 0
-		runLeft = false;
-		SensorValue[led] = 0;
-	}
+	/*	left 	==	no jumper
+			right	==	jumper
+	*/
+	playback(); //play the pre-recorded autonomous back
 }
-
 
 
 /*
@@ -60,8 +56,8 @@ task autonomous() {
 			4	[None]
 		Buttons:
 			5U && 5D	Claw Control
-				5U -> Open claw
-				5D -> Close Claw
+				5U -> Change Claw State
+				5D ->
 			6U && 6D Forklift Control
 				6U -> Raise Forklift
 				6D -> Lower Forklift
@@ -76,46 +72,42 @@ task autonomous() {
 */
 task usercontrol() {
 
-	startTask(record);
+	//startTask(record); //Begin recording an autonomous or programming skills run
 
-	clearTimer(T1);
+	clearTimer(T1); //Clear the timer
 
-	//nMotorEncoder[leftForklift] = 0;
-	///const float ticks = abs((100/360.0) * 5 * 627.2);
 
-	while(true) {
+	while(true) { //Run for the duration of the entire driver control period
 
-	/*if(abs(nMotorEncoder[leftForklift]) > ticks){
-		motor[leftForklift] = 0;
-		motor[rightForklift] = 0;
-	}*/
+		SensorValue[led] = SensorValue[jumper]; //Display the state of the jumper to the LED
 
-		SensorValue[led] = SensorValue[jumper];
-
-		if(vexRT[Btn8U]) {
+		if(vexRT[Btn8U]) { //If button 8U is pressed
 			maxSpeed = 128; //Change the maximum speed to 128 (maximum value)
-		} else if(vexRT[Btn8L] || vexRT[Btn8R]) {
-			maxSpeed = 64;
+		} else if(vexRT[Btn8L] || vexRT[Btn8R]) { //If buttons 8L or 8R are pressed
+			maxSpeed = 64; //Change the maximum speed to 64 (1/2 of the maximum value)
 		} else if(vexRT[Btn8D]) {
 			maxSpeed = 32; //Change the maximum speed to 32 (1/4 of the maximum value)
 		}
 
-		motor[leftDrive] = vexRT[Ch2] * (maxSpeed / 128.0);
-		motor[rightDrive] = vexRT[Ch3] * (maxSpeed / 128.0);
+		motor[leftDrive] = vexRT[Ch2] * (maxSpeed / 128.0); //Control the left side of the drive train
+		motor[rightDrive] = vexRT[Ch3] * (maxSpeed / 128.0); //Control the right side of the drive train
 
-		if(!vexRT[Btn6U] && !vexRT[Btn6D]) {
+		if(!vexRT[Btn6U] && !vexRT[Btn6D]) { //If neither button 6U nor button 6D are pressed
+			//Shut off the forklift
 			motor[forklift1] = 0;
 			motor[forklift2] = 0;
 			motor[forklift3] = 0;
 			motor[forklift4] = 0;
 			motor[forklift5] = 0;
-		} if(vexRT[Btn6U]) {
+		} if(vexRT[Btn6U]) { //If button 6U is pressed
+			//Raise the forklift at maximum speed
 			motor[forklift1] = 128;
 			motor[forklift2] = 128;
 			motor[forklift3] = 128;
 			motor[forklift4] = 128;
 			motor[forklift5] = 128;
-		} else if(vexRT[Btn6D]) {
+		} else if(vexRT[Btn6D]) { //If button 6D is pressed
+			//Lower the forklift at maximum speed
 		 	motor[forklift1] = -128;
 			motor[forklift2] = -128;
 			motor[forklift3] = -128;
@@ -124,14 +116,14 @@ task usercontrol() {
 		}
 
 
-		if(vexRT[Btn5U] && enableClaw) {
-			SensorValue[claw] = !SensorValue[claw];
-			enableClaw = 0;
-			clearTimer(T1);
+		if(vexRT[Btn5U] && enableClaw) { //If button 5U is pressed and enable claw has a non-zero value
+			SensorValue[claw] = !SensorValue[claw]; //
+			enableClaw = 0; //Set the value of enable claw to zero
+			clearTimer(T1); //Clear the timer
 		}
 
-		if(time1(T1) > 250) {
-			enableClaw = 1;
+		if(time1(T1) > 250) { //If T1 has a value greater than 250 (ms)
+			enableClaw = 1; //Set the value of enable claw to one
 		}
 
 	}
