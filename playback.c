@@ -5,12 +5,13 @@ void left();
 void right();
 
 
-void playback() {
+void playback(int num) {
 
-	if(SensorValue[jumper])
-		left();
-	else
-		right();
+		switch(num) {
+			case -1: displayLCDCenteredString(1, "Leftside Autonomous"); left(); break;
+			case 0: displayLCDCenteredString(1, "Nothing"); break;
+			case 1: displayLCDCenteredString(1, "Rightside Autonomous"); right(); break;
+		}
 
 	motor[leftDrive] = 0;
 	motor[rightDrive] = 0;

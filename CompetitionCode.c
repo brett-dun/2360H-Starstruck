@@ -1,4 +1,5 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
+#pragma config(Sensor, in1,    powerExpander,  sensorAnalog)
 #pragma config(Sensor, dgtl10, jumper,         sensorDigitalIn)
 #pragma config(Sensor, dgtl11, claw,           sensorDigitalOut)
 #pragma config(Sensor, dgtl12, led,            sensorDigitalOut)
@@ -33,16 +34,59 @@
 //Variables
 int maxSpeed = 128; //the robot will start with its maximum speed
 int enableClaw = 1; //the claw is ready to be used
+int autoChoice = 0;
 
 
-void pre_auton() { bStopTasksBetweenModes = true; }
+void pre_auton() {
+
+	clearLCDLine(0);
+	clearLCDLine(1);
+	displayLCDCenteredString(1, "None");
+
+	while(true) {
+
+		string primary;
+		sprintf(primary, "Primary: %1.2fV", nImmediateBatteryLevel/1000.0);
+		bLCDBacklight = true;
+
+		if(nLCDButtons == 1) { //left
+			autoChoice--;
+			if(autoChoice < -1)
+				autoChoice = 1;
+
+		}
+		if(nLCDButtons == 2) { //Choose
+			displayLCDCenteredString(0, "Choice Selected:");
+			switch(autoChoice) {
+				case -1: displayLCDCenteredString(1, "Leftside Autonomous"); break;
+				case 0: displayLCDCenteredString(1, "Nothing"); break;
+				case 1: displayLCDCenteredString(1, "Rightside Autonomous"); break;
+			}
+		}
+			break;
+		if(nLCDButtons == 4) { //Right
+			autoChoice++;
+			if(autoChoice > 1)
+				autoChoice = -1;
+		}
+		switch(autoChoice) {
+			case -1: displayLCDCenteredString(1, "Start Left"); break;
+			case 0: displayLCDCenteredString(1, "None"); break;
+			case 1: displayLCDCenteredString(1, "Start Right"); break;
+		}
+		displayLCDCenteredString(0, primary);
+		delay(250);
+
+	}
+}
 
 
 task autonomous() {
-	/*	left 	==	no jumper
-			right	==	jumper
-	*/
-	playback(); //play the pre-recorded autonomous back
+	clearLCDLine(0);
+	clearLCDLine(1);
+	bLCDBacklight = true;
+	displayLCDCenteredString(0, "Running:");
+	playback(autoChoice); //play the pre-recorded autonomous back
 }
 
 
@@ -76,8 +120,18 @@ task usercontrol() {
 
 	clearTimer(T1); //Clear the timer
 
+	clearLCDLine(0);
+	clearLCDLine(1);
+	bLCDBacklight = true;
 
 	while(true) { //Run for the duration of the entire driver control period
+
+		string primary, secondary;
+		sprintf(primary, "Primary: %1.2fV", nImmediateBatteryLevel/1000.0);
+		sprintf(secondary, "Secondary: %1.2fV", powerExpander/182.4);
+
+		displayLCDCenteredString(0, primary);
+		displayLCDCenteredString(1, secondary);
 
 		SensorValue[led] = SensorValue[jumper]; //Display the state of the jumper to the LED
 
