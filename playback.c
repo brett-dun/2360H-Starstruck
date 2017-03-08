@@ -1,27 +1,6 @@
 #include <PrimaryData.c> //Primary autonomous -
 //#include <SecondaryData.c> //Secondary autonomous -
 
-void left();
-void right();
-
-
-void playback(int num) {
-
-		switch(num) {
-			case -1: displayLCDCenteredString(1, "Leftside Autonomous"); left(); break;
-			case 0: displayLCDCenteredString(1, "Nothing"); break;
-			case 1: displayLCDCenteredString(1, "Rightside Autonomous"); right(); break;
-		}
-
-	motor[leftDrive] = 0;
-	motor[rightDrive] = 0;
-	motor[forklift1] = 0;
-	motor[forklift2] = 0;
-	motor[forklift3] = 0;
-
-}
-
-
 void left() {
 
 	int enableClaw = 1;
