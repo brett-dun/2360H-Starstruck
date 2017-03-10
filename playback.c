@@ -1,41 +1,57 @@
 #include <PrimaryData.c> //Primary autonomous -
 //#include <SecondaryData.c> //Secondary autonomous -
 
+const int LEFT_SIZE = sizeof(leftData)/sizeof(leftData[0]); //length of the left array
+const int RIGHT_SIZE = sizeof(rightData)/sizeof(rightData[0]); //length of the right array
+
 void left() {
 
-	int enableClaw = 1;
+	unsigned int enableClaw = 1;
 	int leftJoystick = 0;
-	int rightJoystick = 0;
-	int button5U = 0;
-	int button6U = 0;
-	int button6D = 0;
+	byte rightJoystick = 0;
+	unsigned int button5U = 0;
+	unsigned int button6U = 0;
+	unsigned int button6D = 0;
 
 	clearTimer(T1);
 
 	//Loop through this 100 times a second for n number of seconds
 	for(int i = 0; i < 100 * 15; i++) {
 
+		//Set the variable to the recorded value
 		leftJoystick = leftData[i][0];
 		rightJoystick = leftData[i][1];
-		button5U = leftData[i][2] / 100;
-		button6U = (leftData[i][2] / 10) % 10;
-		button6D = leftData[i][2] % 10;
+		//Decode recorded values for the remaining variables
+		button5U = ((unsigned int) leftData[i][2]) & 1; //Gives value of the first bit
+		button6U = (((unsigned int) leftData[i][2]) >> 1) & 1; //Gives value of the second bit
+		button6D = (((unsigned int) leftData[i][2]) >> 2) & 1; //Gives value of the third bit
 
-		motor[leftDrive] = leftJoystick;
-		motor[rightDrive] = rightJoystick;
+		motor[frontLeftDrive] = leftJoystick;
+		motor[backLeftDrive] = leftJoystick;
+		motor[frontRightDrive] = rightJoystick;
+		motor[backRightDrive] = rightJoystick;
 
 		if(!button6U && !button6D) {
+			//Stop forklift
 			motor[forklift1] = 0;
 			motor[forklift2] = 0;
 			motor[forklift3] = 0;
+			motor[forklift4] = 0;
+			motor[forklift5] = 0;
 		} if(button6U) {
+			//Raise forklift
 			motor[forklift1] = 128;
 			motor[forklift2] = 128;
 			motor[forklift3] = 128;
+			motor[forklift4] = 128;
+			motor[forklift5] = 128;
 		} else if(button6D) {
+			//Lower forklift
 		 	motor[forklift1] = -128;
 			motor[forklift2] = -128;
 			motor[forklift3] = -128;
+			motor[forklift4] = 128;
+			motor[forklift5] = 128;
 		}
 
 		if(button5U && enableClaw) {
@@ -45,7 +61,7 @@ void left() {
 		}
 
 		if(time1(T1) > 250) {
-			enableClaw = 1;
+			enableClaw = 1; //enable claw
 		}
 
 		delay(10);
@@ -54,41 +70,52 @@ void left() {
 }
 
 
+//Same code as above but uses data for the right side
 void right() {
 
-	int enableClaw = 1;
+	unsigned int enableClaw = 1;
 	int leftJoystick = 0;
 	int rightJoystick = 0;
-	int button5U = 0;
-	int button6U = 0;
-	int button6D = 0;
+	unsigned int button5U = 0;
+	unsigned int button6U = 0;
+	unsigned int button6D = 0;
 
 	clearTimer(T1);
 
 	//Loop through this 100 times a second for n number of seconds
-	for(int i = 0; i < 100 * 15; i++) {
+	for(int i = 0; i < RIGHT_SIZE; i++) {
 
+		//Set the variable to the recorded value
 		leftJoystick = rightData[i][0];
 		rightJoystick = rightData[i][1];
-		button5U = rightData[i][2] / 100;
-		button6U = (rightData[i][2] / 10) % 10;
-		button6D = rightData[i][2] % 10;
+		//Decode recorded values for the remaining variables
+		button5U = ((unsigned int) rightData[i][2]) & 1; //Gives value of the first bit
+		button6U = (((unsigned int) rightData[i][2]) >> 1) & 1; //Gives value of the second bit
+		button6D = (((unsigned int) rightData[i][2]) >> 2) & 1; //Gives value of the third bit
 
-		motor[leftDrive] = leftJoystick;
-		motor[rightDrive] = rightJoystick;
+		motor[frontLeftDrive] = leftJoystick;
+		motor[backLeftDrive] = leftJoystick;
+		motor[frontRightDrive] = rightJoystick;
+		motor[backRightDrive] = rightJoystick;
 
 		if(!button6U && !button6D) {
 			motor[forklift1] = 0;
 			motor[forklift2] = 0;
 			motor[forklift3] = 0;
-		} if(button6U) {
+			motor[forklift4] = 0;
+			motor[forklift5] = 0;
+		} else if(button6U) {
 			motor[forklift1] = 128;
 			motor[forklift2] = 128;
 			motor[forklift3] = 128;
+			motor[forklift4] = 128;
+			motor[forklift5] = 128;
 		} else if(button6D) {
 		 	motor[forklift1] = -128;
 			motor[forklift2] = -128;
 			motor[forklift3] = -128;
+			motor[forklift4] = -128;
+			motor[forklift5] = -128;
 		}
 
 		if(button5U && enableClaw) {

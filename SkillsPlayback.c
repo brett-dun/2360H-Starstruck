@@ -19,25 +19,36 @@ void playback() {
 		leftJoystick = leftData[i][0];
 		rightJoystick = leftData[i][1];
 		//Decode recorded values for the remaining variables
-		button5U = leftData[i][2] / 100; //Gives value of the 100s place
-		button6U = (leftData[i][2] / 10) % 10; //Gives value of the 10s place
-		button6D = leftData[i][2] % 10; //Gives value of the 1s place
+		button5U = leftData[i][2] % 2; //Gives value of the first bit
+		button6U = (leftData[i][2] >> 1) % 2; //Gives value of the second bit
+		button6D = (leftData[i][2] >> 2) % 2; //Gives value of the third bit
 
-		motor[leftDrive] = leftJoystick;
-		motor[rightDrive] = rightJoystick;
+		motor[frontLeftDrive] = leftJoystick;
+		motor[backLeftDrive] = leftJoystick;
+		motor[frontRightDrive] = rightJoystick;
+		motor[backRightDrive] = rightJoystick;
 
 		if(!button6U && !button6D) {
+			//Shut motors off
 			motor[forklift1] = 0;
 			motor[forklift2] = 0;
 			motor[forklift3] = 0;
+			motor[forklift4] = 0;
+			motor[forklift5] = 0;
 		} if(button6U) {
+			//Lift forklift up
 			motor[forklift1] = 128;
 			motor[forklift2] = 128;
 			motor[forklift3] = 128;
+			motor[forklift4] = 128;
+			motor[forklift5] = 128;
 		} else if(button6D) {
+			//Lower forklift
 		 	motor[forklift1] = -128;
 			motor[forklift2] = -128;
 			motor[forklift3] = -128;
+			motor[forklift4] = 128;
+			motor[forklift5] = 128;
 		}
 
 		if(button5U && enableClaw) {
@@ -47,13 +58,14 @@ void playback() {
 		}
 
 		if(time1(T1) > 250) {
-			enableClaw = 1;
+			enableClaw = 1; //enable the claw
 		}
 
-		delay(20);
+		delay(200);
 
 	}
 
+	//Shut motors off
 	motor[leftDrive] = 0;
 	motor[rightDrive] = 0;
 	motor[forklift1] = 0;
