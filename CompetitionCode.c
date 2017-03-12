@@ -49,25 +49,27 @@ void pre_auton() {
 		if(nLCDButtons == 1) { //Left button
 			autoChoice--; //Decrement the choice
 			if(autoChoice < 1) { //If it is less than one
-				autoChoice = 3; //Set it to three
+				autoChoice = 4; //Set it to three
 			}
 			switch(autoChoice) { //Select code based on this variable
-				case 1: displayLCDCenteredString(1, "Start Left"); break;
+				case 1: displayLCDCenteredString(1, "Old Right"); break;
 				case 2: displayLCDCenteredString(1, "None"); break;
-				case 3: displayLCDCenteredString(1, "Start Right"); break;
+				case 3: displayLCDCenteredString(1, "Right Cube"); break;
+				case 4: displayLCDCenteredString(1, "Right Stars"); break;
 			}
 			delay(250);
 		}
 
 		if(nLCDButtons == 4) { //Right button
 			autoChoice++; //Increment the choice
-			if(autoChoice > 3) { //If it is greater than three
+			if(autoChoice > 4) { //If it is greater than three
 				autoChoice = 1; //Set it to one
 			}
 			switch(autoChoice) {
-				case 1: displayLCDCenteredString(1, "Start Left"); break;
+				case 1: displayLCDCenteredString(1, "Old Right"); break;
 				case 2: displayLCDCenteredString(1, "None"); break;
-				case 3: displayLCDCenteredString(1, "Start Right"); break;
+				case 3: displayLCDCenteredString(1, "Right Cube"); break;
+				case 4: displayLCDCenteredString(1, "Right Stars"); break;
 			}
 			delay(250);
 		}
@@ -79,6 +81,7 @@ void pre_auton() {
 
 task autonomous() {
 
+
 	//Clear the LCD
 	clearLCDLine(0);
 	clearLCDLine(1);
@@ -86,9 +89,10 @@ task autonomous() {
 
 	displayLCDCenteredString(0, "Running:"); //Display "Running" on top
 	switch(autoChoice) {
-		case 1: displayLCDCenteredString(1, "Leftside"); left(); break;
+		case 1: displayLCDCenteredString(1, "Right - Old"); left(); break;
 		case 2: displayLCDCenteredString(1, "Nothing"); break;
-		case 3: displayLCDCenteredString(1, "Rightside"); right(); break;
+		case 3: displayLCDCenteredString(1, "Right - Cube"); right(); break;
+		case 4: displayLCDCenteredString(1, "Right - Star"); either(); break;
 	}
 
 	//Clear the LCD
@@ -137,7 +141,7 @@ task autonomous() {
 */
 task usercontrol() {
 
-	startTask(record); //Begin recording an autonomous or programming skills run
+	//startTask(record); //Begin recording an autonomous or programming skills run
 
 	clearTimer(T1); //Clear the timer
 
