@@ -27,10 +27,10 @@ void left() {
 		button6U = (((unsigned int) leftData[i][2]) >> 1) & 1; //Gives value of the second bit
 		button6D = (((unsigned int) leftData[i][2]) >> 2) & 1; //Gives value of the third bit
 
-		motor[frontLeftDrive] = leftJoystick;
-		motor[backLeftDrive] = leftJoystick;
-		motor[frontRightDrive] = rightJoystick;
-		motor[backRightDrive] = rightJoystick;
+		motor[frontLeft] = leftJoystick;
+		motor[backLeft] = leftJoystick;
+		motor[frontRight] = rightJoystick;
+		motor[backRight] = rightJoystick;
 
 		if(!button6U && !button6D) {
 			//Stop forklift
