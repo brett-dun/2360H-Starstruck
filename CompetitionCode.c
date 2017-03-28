@@ -27,22 +27,17 @@
 
 
 //Supporting Files
-//#include <Recorder.c> //Records an autonomous run
-//#include <Playback.c> //Plays an autonomous run back
-//#include <SkillsPlayback.c> //Plays a programming skills run back
-//#include <SkillsRecorder.c> //Rocords a programming skills run
 #include <BaseFunctions.c>
 
 
 //Variables
 int maxSpeed = 128; //the robot will start with its maximum speed
 int enableClaw = 1; //the claw is ready to be used
-//int autoChoice = 2; //No autonomous will run
+int autoChoice = 4; //No autonomous will run
 
 
 void pre_auton() {
 
-	/*
 	bStopTasksBetweenModes = true; //Set this to true
 
 	//Clear the LCD
@@ -57,32 +52,38 @@ void pre_auton() {
 		if(nLCDButtons == 1) { //Left button
 			autoChoice--; //Decrement the choice
 			if(autoChoice < 1) { //If it is less than one
-				autoChoice = 4; //Set it to three
+				autoChoice = 7; //Set it to three
 			}
 			switch(autoChoice) { //Select code based on this variable
-				case 1: displayLCDCenteredString(1, "Old Right"); break;
-				case 2: displayLCDCenteredString(1, "None"); break;
-				case 3: displayLCDCenteredString(1, "Right Cube"); break;
-				case 4: displayLCDCenteredString(1, "Right Stars"); break;
+				case 1: displayLCDCenteredString(1, "Left - Cube"); break;
+				case 2: displayLCDCenteredString(1, "Left - Back Stars"); break;
+				case 3: displayLCDCenteredString(1, "Left - Front Stars"); break;
+				case 4: displayLCDCenteredString(1, "Nothing"); break;
+				case 5: displayLCDCenteredString(1, "Right - Cube"); break;
+				case 6: displayLCDCenteredString(1, "Right - Back Stars"); break;
+				case 7: displayLCDCenteredString(1, "Right - Front Stars"); break;
 			}
 			delay(250);
 		}
 
 		if(nLCDButtons == 4) { //Right button
 			autoChoice++; //Increment the choice
-			if(autoChoice > 4) { //If it is greater than three
+			if(autoChoice > 7) { //If it is greater than three
 				autoChoice = 1; //Set it to one
 			}
 			switch(autoChoice) {
-				case 1: displayLCDCenteredString(1, "Old Right"); break;
-				case 2: displayLCDCenteredString(1, "None"); break;
-				case 3: displayLCDCenteredString(1, "Right Cube"); break;
-				case 4: displayLCDCenteredString(1, "Right Stars"); break;
+				case 1: displayLCDCenteredString(1, "Left - Cube"); break;
+				case 2: displayLCDCenteredString(1, "Left - Back Stars"); break;
+				case 3: displayLCDCenteredString(1, "Left - Front Stars"); break;
+				case 4: displayLCDCenteredString(1, "Nothing"); break;
+				case 5: displayLCDCenteredString(1, "Right - Cube"); break;
+				case 6: displayLCDCenteredString(1, "Right - Back Stars"); break;
+				case 7: displayLCDCenteredString(1, "Right - Front Stars"); break;
 			}
 			delay(250);
 		}
 
-	}*/
+	}
 
 }
 
@@ -97,10 +98,14 @@ task autonomous() {
 
 	displayLCDCenteredString(0, "Running:"); //Display "Running" on top
 	switch(autoChoice) {
-		case 1: displayLCDCenteredString(1, "Right - Old"); left(); break;
-		case 2: displayLCDCenteredString(1, "Nothing"); break;
-		case 3: displayLCDCenteredString(1, "Right - Cube"); right(); break;
-		case 4: displayLCDCenteredString(1, "Right - Star"); either(); break;
+		case 1: displayLCDCenteredString(1, "Left - Cube"); break;
+		case 2: displayLCDCenteredString(1, "Left - Back Stars"); break;
+		case 3: displayLCDCenteredString(1, "Left - Front Stars"); break;
+		case 4: displayLCDCenteredString(1, "Nothing"); break;
+		case 5: displayLCDCenteredString(1, "Right - Cube"); break;
+		case 6: displayLCDCenteredString(1, "Right - Back Stars"); break;
+		case 7: displayLCDCenteredString(1, "Right - Front Stars"); break;
+
 	}
 
 	//Clear the LCD
