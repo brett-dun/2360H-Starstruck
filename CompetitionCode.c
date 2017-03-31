@@ -90,6 +90,7 @@ void pre_auton() {
 
 task autonomous() {
 
+	SensorValue[sixBar] = -40; //The lift starts at this angle
 
 	/*//Clear the LCD
 	clearLCDLine(0);

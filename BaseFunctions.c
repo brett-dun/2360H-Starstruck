@@ -1,12 +1,14 @@
 /*	Status of Each Function
-- turnDegrees:
 - driveInches:
+- turnDegrees:
+- turnDegreesGyro:
 - moveForkliftDegrees:
 - openClaw:
 - closeClaw:
 */
 
 const float WHEEL_DIAMETER = 4;
+float sixBarTarget = -40; //starting position
 
 /*
 	distance > 0 >>> forward
@@ -155,15 +157,13 @@ void turnDegreesGyro(float angle){
 
 
 /*
-	angle > 0 && speed > 0 >>> raise
-	angle > 0 && speed < 0 >>> lower
-	angle < 0 && speed > 0 >>> lower
-	angle < 0 && speed < 0 >>> raise
+	angle > 0 >>> raise
+	angle < 0 >>> lower
 */
-void moveForkliftDegrees(float angle, int speed) {
+void moveForkliftDegrees(float angle) {
 
-	SensorValue[sixBar] = 0;
-	speed = angle < 0 ? -speed : speed;
+	float initial = SensorValue[sixBar];
+	float speed = angle < 0 ? -128 : 128;
 
 	const float ticks = abs((angle/360.0) * 360);
 
@@ -175,7 +175,7 @@ void moveForkliftDegrees(float angle, int speed) {
 		motor[forklift4] = speed;
 		motor[forklift5] = speed;
 
-	} while(abs(sixBar) < ticks);
+	} while(abs(SensorValue[sixBar]-initial) < ticks);
 
 	motor[forklift1] = 0;
 	motor[forklift2] = 0;
@@ -185,6 +185,21 @@ void moveForkliftDegrees(float angle, int speed) {
 
 }
 
+task maintainForklift() {
+
+	while(true) {
+
+		float speed = atan(sixBarTarget-SensorValue[sixBar]) * 128;
+
+		motor[forklift1] = speed;
+		motor[forklift2] = speed;
+		motor[forklift3] = speed;
+		motor[forklift4] = speed;
+		motor[forklift5] = speed;
+
+	}
+
+}
 
 /*
 Use these methods to avoid having to change the sensor value if the physical setup of the pneumatics changes
