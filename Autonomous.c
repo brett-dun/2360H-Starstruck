@@ -32,6 +32,7 @@ void cube(bool leftStart) {
 
 	//drive(60);
 	//openClaw();
+	right();
 }
 
 void backStars(bool leftStart) {

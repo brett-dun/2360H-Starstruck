@@ -9,6 +9,7 @@
 
 const float WHEEL_DIAMETER = 4;
 float sixBarTarget = -40; //starting position
+float gyroValue, angleDiff;
 
 /*
 	distance > 0 >>> forward
@@ -66,8 +67,27 @@ void driveInches(float distance) {
 	angle < 0 >>> counterclockwise
 */
 void turnDegrees(float angle){
-
+ // 14.5, 15, diameter = 20.86, 1 tick = 0.1431 degrees
 	nMotorEncoder[backLeft] = 0;
+	nMotorEncoder[frontLeft] = 0;
+	nMotorEncoder[backRight] = 0;
+	nMotorEncoder[frontRight] = 0;
+
+	float desiredTicks = angle/0.14308;
+
+	while(abs(nMotorEncoder[backLeft]) < desiredTicks) {
+		motor[backLeft] = 5 + 64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[backLeft])));
+		motor[frontLeft] = 5 + 64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[frontLeft])));
+		motor[backRight] = -5 -64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[backRight])));
+		motor[frontRight] = -5 -64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[frontRight])));
+	}
+	motor[backLeft] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontRight] = 0;
+
+
+/*	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontLeft] = 0;
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[frontRight] = 0;
@@ -92,12 +112,9 @@ void turnDegrees(float angle){
 
 		leftAverage = ( abs(nMotorEncoder[backLeft]) + abs(nMotorEncoder[frontLeft]) ) / 2.0;
 		rightAverage = ( abs(nMotorEncoder[backRight]) + abs(nMotorEncoder[frontRight]) ) / 2.0;
-		total = leftAverage + rightAverage;
 
-		speed = atan( abs(ticks - total) / 2.0 ) / (PI/2) * max;
-
-		leftSpeed = -speed;//-(atan(0.5 *(ticks - leftAverage)) / (PI/2) * max + speed);
-		rightSpeed = speed;//atan(0.5 *(ticks - rightAverage)) / (PI/2) * max + speed;
+		leftSpeed = -atan( abs(ticks - leftAverage) / 64.0 ) / (PI/2) * max;//-(atan(0.5 *(ticks - leftAverage)) / (PI/2) * max + speed);
+		rightSpeed = atan( abs(ticks - leftAverage) / 64.0 ) / (PI/2) * max;//atan(0.5 *(ticks - rightAverage)) / (PI/2) * max + speed;
 
 		motor[backLeft] = leftSpeed;
 		motor[frontLeft] = leftSpeed;
@@ -109,7 +126,7 @@ void turnDegrees(float angle){
 	motor[backLeft] = 0;
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
-	motor[frontRight] = 0;
+	motor[frontRight] = 0; */
 }
 
 /*
@@ -118,11 +135,11 @@ void turnDegrees(float angle){
 */
 void turnDegreesGyro(float angle){
 
-	const float max = angle < 0 ? -64 : 64;
+	const float max = angle < 0 ? -32 : 32;
 
 	float initial = SensorValue[gyro] / 10.0;
 	initial = initial > 0 ? initial : 360-initial;
-	float angleDiff = 0;
+	//float angleDiff = 0;
 	float speed = 0;
 	float leftSpeed = 0;
 	float rightSpeed = 0;
@@ -134,10 +151,12 @@ void turnDegreesGyro(float angle){
 
 	do {
 
-		angleDiff = (360 - SensorValue[gyro] / 10.0) + initial;
-		angleDiff = angleDiff < 360 - angleDiff ? angleDiff : 360 - angleDiff;
+		gyroValue = SensorValue[gyro];
 
-		speed = atan(angle - angleDiff) / (PI/2) * max;
+		float temp = (360 - SensorValue[gyro] / 10.0) + initial;
+		angleDiff = angleDiff < 360 - angleDiff ? temp : 360 - temp;
+
+		speed = max; //atan(angle - angleDiff) / (PI/2) * max;
 
 		leftSpeed = -speed;
 		rightSpeed = speed;
