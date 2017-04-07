@@ -8,8 +8,8 @@
 */
 
 const float WHEEL_DIAMETER = 4;
-float sixBarTarget = -40; //starting position
-float gyroValue, angleDiff;
+//float sixBarTarget = -40; //starting position
+float gyroValue;
 
 /*
 	distance > 0 >>> forward
@@ -38,7 +38,7 @@ void driveInches(float distance) {
 		rightAverage = ( abs(nMotorEncoder[backRight]) + abs(nMotorEncoder[frontRight]) ) / 2.0;
 		average = ( leftAverage + rightAverage ) / 2.0;
 
-		speed = atan(0.00125*3*(ticks - average)) / (PI/2) * max;
+		speed = max;//atan(0.00125*3*(ticks - average)) / (PI/2) * max;
 
 		if(leftAverage < rightAverage) {
 			leftSpeed = speed;
@@ -55,7 +55,31 @@ void driveInches(float distance) {
 
 	} while(leftAverage < ticks || rightAverage < ticks);
 
+
+	motor[backLeft] = max < 0 ? 128: -128;
+	motor[frontLeft] = max < 0 ? 128: -128;
+	motor[backRight] = max < 0 ? 128: -128;
+	motor[frontRight] = max < 0 ? 128: -128;
+
+	delay(100);
+
   motor[backLeft] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontRight] = 0;
+
+}
+
+void squareRobot() {
+
+	do {
+		motor[backLeft] = -128;
+		motor[frontLeft] = -128;
+		motor[backRight] = -128;
+		motor[frontRight] = -128;
+	} while(!SensorValue[touch1] || !SensorValue[touch2]);
+
+	motor[backLeft] = 0;
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[frontRight] = 0;
@@ -66,7 +90,7 @@ void driveInches(float distance) {
 	angle > 0 >>> clockwise
 	angle < 0 >>> counterclockwise
 */
-void turnDegrees(float angle){
+/*void turnDegrees(float angle){
  // 14.5, 15, diameter = 20.86, 1 tick = 0.1431 degrees
 	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontLeft] = 0;
@@ -81,6 +105,7 @@ void turnDegrees(float angle){
 		motor[backRight] = -5 -64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[backRight])));
 		motor[frontRight] = -5 -64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[frontRight])));
 	}
+
 	motor[backLeft] = 0;
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
@@ -126,47 +151,41 @@ void turnDegrees(float angle){
 	motor[backLeft] = 0;
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
-	motor[frontRight] = 0; */
-}
+	motor[frontRight] = 0;
+}*/
 
 /*
 	angle > 0 >>> clockwise
 	angle < 0 >>> counterclockwise
 */
-void turnDegreesGyro(float angle){
+void targetAngle(float angle, bool rightTurn){
 
-	const float max = angle < 0 ? -32 : 32;
+	const float speed = rightTurn ? -80 : 80;
 
-	float initial = SensorValue[gyro] / 10.0;
-	initial = initial > 0 ? initial : 360-initial;
-	//float angleDiff = 0;
-	float speed = 0;
-	float leftSpeed = 0;
-	float rightSpeed = 0;
-
-	motor[backLeft] = max;
-	motor[frontLeft] = max;
-	motor[backRight] = -max;
-	motor[frontRight] = -max;
+	float leftSpeed = -speed;
+	float rightSpeed = speed;
 
 	do {
 
-		gyroValue = SensorValue[gyro];
+		gyroValue = SensorValue[in1] / 10.0;
+		if(gyroValue < 0)
+			gyroValue = 360 + gyroValue;
+		//gyroValue = gyroValue < 0 ? 360 - gyroValue : gyroValue;
 
-		float temp = (360 - SensorValue[gyro] / 10.0) + initial;
-		angleDiff = angleDiff < 360 - angleDiff ? temp : 360 - temp;
+		motor[backLeft] = leftSpeed * atan(0.1 * abs(angle - gyroValue));
+		motor[frontLeft] = leftSpeed * atan(0.1 * abs(angle - gyroValue));
+		motor[backRight] = rightSpeed * atan(0.1 * abs(angle - gyroValue));
+		motor[frontRight] = rightSpeed * atan(0.1 * abs(angle - gyroValue));
 
-		speed = max; //atan(angle - angleDiff) / (PI/2) * max;
+	} while( gyroValue < angle - 0.5 || gyroValue > angle + 0.5);
 
-		leftSpeed = -speed;
-		rightSpeed = speed;
 
-		motor[backLeft] = leftSpeed;
-		motor[frontLeft] = leftSpeed;
-		motor[backRight] = rightSpeed;
-		motor[frontRight] = rightSpeed;
+	motor[backLeft] = rightTurn ? -128: 128;
+	motor[frontLeft] = rightTurn ? -128: 128;
+	motor[backRight] = rightTurn ? 128: -128;
+	motor[frontRight] = rightTurn ? 128: -128;
 
-	}	while(angleDiff < angle);
+	delay(100);
 
 	motor[backLeft] = 0;
 	motor[frontLeft] = 0;
@@ -181,20 +200,17 @@ void turnDegreesGyro(float angle){
 */
 void moveForkliftDegrees(float angle) {
 
-	float initial = SensorValue[sixBar];
+	SensorValue[sixBar] = 0;
 	float speed = angle < 0 ? -128 : 128;
 
-	const float ticks = abs((angle/360.0) * 360);
-
 	do {
-
 		motor[forklift1] = speed;
 		motor[forklift2] = speed;
 		motor[forklift3] = speed;
 		motor[forklift4] = speed;
 		motor[forklift5] = speed;
 
-	} while(abs(SensorValue[sixBar]-initial) < ticks);
+	} while(abs(SensorValue[sixBar]) < abs(angle));
 
 	motor[forklift1] = 0;
 	motor[forklift2] = 0;
@@ -204,20 +220,72 @@ void moveForkliftDegrees(float angle) {
 
 }
 
-task maintainForklift() {
+task raiseForklift() {
 
-	while(true) {
+	SensorValue[sixBar] = 0;
 
-		float speed = atan(sixBarTarget-SensorValue[sixBar]) * 128;
+	do {
+		motor[forklift1] = 128;
+		motor[forklift2] = 128;
+		motor[forklift3] = 128;
+		motor[forklift4] = 128;
+		motor[forklift5] = 128;
 
-		motor[forklift1] = speed;
-		motor[forklift2] = speed;
-		motor[forklift3] = speed;
-		motor[forklift4] = speed;
-		motor[forklift5] = speed;
+	} while(abs(SensorValue[sixBar]) < 100);
 
-	}
+	motor[forklift1] = 0;
+	motor[forklift2] = 0;
+	motor[forklift3] = 0;
+	motor[forklift4] = 0;
+	motor[forklift5] = 0;
+}
 
+task lowerForklift() {
+	SensorValue[sixBar] = 0;
+
+	do {
+
+		motor[forklift1] = -128;
+		motor[forklift2] = -128;
+		motor[forklift3] = -128;
+		motor[forklift4] = -128;
+		motor[forklift5] = -128;
+
+	} while(abs(SensorValue[sixBar]) < 100);
+
+	motor[forklift1] = 0;
+	motor[forklift2] = 0;
+	motor[forklift3] = 0;
+	motor[forklift4] = 0;
+	motor[forklift5] = 0;
+}
+
+task maintainForkliftUp() {
+	motor[forklift1] = 128;
+	motor[forklift2] = 128;
+	motor[forklift3] = 128;
+	motor[forklift4] = 128;
+	motor[forklift5] = 128;
+	delay(500);
+	motor[forklift1] = 0;
+	motor[forklift2] = 0;
+	motor[forklift3] = 0;
+	motor[forklift4] = 0;
+	motor[forklift5] = 0;
+}
+
+task maintainForkliftDown() {
+	motor[forklift1] = -128;
+	motor[forklift2] = -128;
+	motor[forklift3] = -128;
+	motor[forklift4] = -128;
+	motor[forklift5] = -128;
+	delay(1500);
+	motor[forklift1] = 0;
+	motor[forklift2] = 0;
+	motor[forklift3] = 0;
+	motor[forklift4] = 0;
+	motor[forklift5] = 0;
 }
 
 /*
@@ -229,3 +297,7 @@ void openClaw() {
 void closeClaw() {
 	SensorValue[claw] = 0;
 }
+
+/*void changeClaw() {
+	SensorValue[claw] = !SensorValue[claw];
+}*/
