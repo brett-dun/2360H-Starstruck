@@ -222,7 +222,7 @@ void moveForkliftDegrees(float angle) {
 
 task raiseForklift() {
 
-	SensorValue[sixBar] = 0;
+	//float initial = abs(SensorValue[sixBar]);
 
 	do {
 		motor[forklift1] = 128;
@@ -241,7 +241,9 @@ task raiseForklift() {
 }
 
 task lowerForklift() {
-	SensorValue[sixBar] = 0;
+	//SensorValue[sixBar] = 0;
+
+	//float initial = abs(SensorValue[sixBar]);
 
 	do {
 
@@ -251,7 +253,7 @@ task lowerForklift() {
 		motor[forklift4] = -128;
 		motor[forklift5] = -128;
 
-	} while(abs(SensorValue[sixBar]) < 100);
+	} while(abs(SensorValue[sixBar]) > 1);
 
 	motor[forklift1] = 0;
 	motor[forklift2] = 0;
@@ -275,11 +277,11 @@ task maintainForkliftUp() {
 }
 
 task maintainForkliftDown() {
-	motor[forklift1] = -128;
-	motor[forklift2] = -128;
-	motor[forklift3] = -128;
-	motor[forklift4] = -128;
-	motor[forklift5] = -128;
+	motor[forklift1] = -60;
+	motor[forklift2] = -60;
+	motor[forklift3] = -60;
+	motor[forklift4] = -60;
+	motor[forklift5] = -60;
 	delay(1500);
 	motor[forklift1] = 0;
 	motor[forklift2] = 0;

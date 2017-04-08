@@ -1,36 +1,36 @@
 
 void cube(bool leftStart) {
 
-	openClaw();
+	openClaw(); //Deploy Claw
 	delay(250);
 	startTask(maintainForkliftDown);
 	closeClaw();
 	driveInches(10);
 
-	if(leftStart)
+	/*if(leftStart) //Turn to move star out of the way
 		targetAngle(340,true);
 	else
 		targetAngle(20,false);
 
-	if(leftStart)
+	if(leftStart) //Turn back to original position
 		targetAngle(0,false);
 	else
-		targetAngle(0,true);
+		targetAngle(0,true);*/
 
 	openClaw();
 	driveInches(23);
-	closeClaw();
+	closeClaw(); //Grab Cube
 	startTask(raiseForklift);
 	driveInches(14);
 
-	if(leftStart)
+	if(leftStart) //Turn towards fence
 		targetAngle(45,false);
 	else
 		targetAngle(315,true);
 
 	startTask(maintainForkliftUp);
 	driveInches(40);
-	openClaw();
+	openClaw(); //Drop cube
 	delay(200);
 	driveInches(-24);
 
@@ -42,23 +42,25 @@ void cube(bool leftStart) {
 	startTask(lowerForklift);
 	driveInches(-64);
 
-	if(leftStart)
+	if(leftStart) //Turn towards stars
 		targetAngle(310,true);
 	else
 		targetAngle(50,false);
 
 	startTask(maintainForkliftDown);
-	driveInches(50);
-	closeClaw();
+	driveInches(25);
+	startTask(maintainForkliftDown);
+	driveInches(25);
+	closeClaw(); //Grab stars
 
-	if(leftStart)
+	if(leftStart) //Turn towards fence
 		targetAngle(50,false);
 	else
 		targetAngle(310,true);
 
 	startTask(raiseForklift);
 	driveInches(55);
-	openClaw();
+	openClaw(); //Drop stars
 }
 
 
@@ -81,6 +83,33 @@ void backStars(bool leftStart) {
 	driveInches(37);
 	startTask(maintainForkliftUp);
 	driveInches(30);
+
+	openClaw();
+	delay(200);
+	squareRobot();
+	driveInches(12);
+
+	if(leftStart)
+		targetAngle(185,false);
+	else
+		targetAngle(175,true);
+
+	startTask(lowerForklift);
+	driveInches(6);
+	delay(1200);
+	closeClaw();
+	delay(200);
+	driveInches(-6);
+
+	if(leftStart)
+		targetAngle(110,true);
+	else
+		targetAngle(250,false);
+
+	startTask(raiseForklift);
+	driveInches(50);
+	startTask(maintainForkliftUp);
+	driveInches(10);
 	openClaw();
 }
 
@@ -88,24 +117,36 @@ void backStars(bool leftStart) {
 
 void frontStars(bool leftStart) {
 	openClaw();
-	delay(250);
-	moveForkliftDegrees(95);
-	driveInches(54);
+	delay(500);
+	closeClaw();
+	startTask(raiseForklift);
+	driveInches(65);
+	openClaw(); //Drop stars
+	delay(200);
+	squareRobot();
+	driveInches(12);
+
+	if(leftStart)
+		targetAngle(80,false);
+	else
+		targetAngle(280,true);
+
+	startTask(lowerForklift);
+	driveInches(6);
+	delay(1200);
+	closeClaw();
+	delay(200);
+	driveInches(-6);
+
+	if(leftStart)
+		targetAngle(20,true);
+	else
+		targetAngle(340,false);
+
+	startTask(raiseForklift);
+	driveInches(63);
 	openClaw();
-	driveInches(-24);
 
-	if(leftStart)
-		targetAngle(30,false);
-	else
-		targetAngle(330,true);
-
-	driveInches(30);
-	driveInches(-30);
-
-	if(leftStart)
-		targetAngle(170,false);
-	else
-		targetAngle(190,true);
 }
 
 

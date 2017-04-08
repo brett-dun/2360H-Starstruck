@@ -33,11 +33,14 @@
 //#include <Recorder.c>
 //#include <Playback.c>
 
+const int forkliftDownSpeed = -100;
+
 
 //Variables
 int maxSpeed = 128; //the robot will start with its maximum speed
 int enableClaw = 1; //the claw is ready to be used
 int autoChoice = 4; //No autonomous will run
+int speed = 0;
 
 
 void pre_auton() {
@@ -60,12 +63,12 @@ void pre_auton() {
 			}
 			switch(autoChoice) { //Select code based on this variable
 				case 1: displayLCDCenteredString(1, "Left - Cube"); break;
-				case 2: displayLCDCenteredString(1, "Left - Back Stars"); break;
-				case 3: displayLCDCenteredString(1, "Left - Front Stars"); break;
+				case 2: displayLCDCenteredString(1, "Left - Back"); break;
+				case 3: displayLCDCenteredString(1, "Left - Front"); break;
 				case 4: displayLCDCenteredString(1, "Nothing"); break;
 				case 5: displayLCDCenteredString(1, "Right - Cube"); break;
-				case 6: displayLCDCenteredString(1, "Right - Back Stars"); break;
-				case 7: displayLCDCenteredString(1, "Right - Front Stars"); break;
+				case 6: displayLCDCenteredString(1, "Right - Back"); break;
+				case 7: displayLCDCenteredString(1, "Right - Front"); break;
 			}
 			delay(250);
 		}
@@ -98,10 +101,15 @@ void pre_auton() {
 
 
 task autonomous() {
-	skills();
-	/*
-	SensorValue[sixBar] = -40; //The lift starts at this angle
-	//startTask(maintainForklift);
+	//skills();
+	SensorValue[sixBar] = 0;
+	/*delay(3000);
+	while(true) {
+		startTask(raiseForklift);
+		delay(4000);
+		startTask(lowerForklift);
+		delay(4000);
+	}*/
 
 	//Clear the LCD
 	clearLCDLine(0);
@@ -111,12 +119,12 @@ task autonomous() {
 	displayLCDCenteredString(0, "Running:"); //Display "Running" on top
 	switch(autoChoice) {
 		case 1: displayLCDCenteredString(1, "Left - Cube"); cube(true); break;
-		case 2: displayLCDCenteredString(1, "Left - Back Stars"); backStars(true); break;
-		case 3: displayLCDCenteredString(1, "Left - Front Stars"); frontStars(true); break;
+		case 2: displayLCDCenteredString(1, "Left - Back"); backStars(true); break;
+		case 3: displayLCDCenteredString(1, "Left - Front"); frontStars(true); break;
 		case 4: displayLCDCenteredString(1, "Nothing"); break;
 		case 5: displayLCDCenteredString(1, "Right - Cube"); cube(false); break;
-		case 6: displayLCDCenteredString(1, "Right - Back Stars"); backStars(false); break;
-		case 7: displayLCDCenteredString(1, "Right - Front Stars"); frontStars(false); break;
+		case 6: displayLCDCenteredString(1, "Right - Back"); backStars(false); break;
+		case 7: displayLCDCenteredString(1, "Right - Front"); frontStars(false); break;
 
 	}
 
@@ -173,9 +181,9 @@ task usercontrol() {
 		if(vexRT[Btn8U]) { //If button 8U is pressed
 			maxSpeed = 128; //Change the maximum speed to 128 (maximum value)
 		} else if(vexRT[Btn8L] || vexRT[Btn8R]) { //If buttons 8L or 8R are pressed
-			maxSpeed = 64; //Change the maximum speed to 64 (1/2 of the maximum value)
+			maxSpeed = 96; //Change the maximum speed to 64 (1/2 of the maximum value)
 		} else if(vexRT[Btn8D]) {
-			maxSpeed = 32; //Change the maximum speed to 32 (1/4 of the maximum value)
+			maxSpeed = 64; //Change the maximum speed to 32 (1/4 of the maximum value)
 		}
 
 		motor[frontLeft] = vexRT[Ch3] * (maxSpeed / 128.0); //Control the left side of the drive train
@@ -183,28 +191,29 @@ task usercontrol() {
 		motor[frontRight] = vexRT[Ch2] * (maxSpeed / 128.0);
 		motor[backRight] = vexRT[Ch2] * (maxSpeed / 128.0);
 
-		if(!vexRT[Btn6U] && !vexRT[Btn6D]) { //If neither button 6U nor button 6D are pressed
-			//Shut off the forklift
-			motor[forklift1] = 0;
-			motor[forklift2] = 0;
-			motor[forklift3] = 0;
-			motor[forklift4] = 0;
-			motor[forklift5] = 0;
-		} if(vexRT[Btn6U]) { //If button 6U is pressed
-			//Raise the forklift at maximum speed
-			motor[forklift1] = 128;
-			motor[forklift2] = 128;
-			motor[forklift3] = 128;
-			motor[forklift4] = 128;
-			motor[forklift5] = 128;
+		if(vexRT[Btn6U]) { //If button 6U is pressed
+			speed = 128;
 		} else if(vexRT[Btn6D]) { //If button 6D is pressed
-			//Lower the forklift at maximum speed
-		 	motor[forklift1] = -128;
-			motor[forklift2] = -128;
-			motor[forklift3] = -128;
-			motor[forklift4] = -128;
-			motor[forklift5] = -128;
+		 	if(SensorValue[sixBar] > 36) {
+				speed = -128;
+			} else if(SensorValue[sixBar] > 24) {
+				speed = -96;
+			} else if(SensorValue[sixBar] > 12) {
+				speed = -64;
+			} else {
+				speed = -32;
+			} /*else {
+				speed = 0;
+			}*/
+		} else {
+			speed = 0;
 		}
+
+		motor[forklift1] = speed;
+		motor[forklift2] = speed;
+		motor[forklift3] = speed;
+		motor[forklift4] = speed;
+		motor[forklift5] = speed;
 
 
 		if(vexRT[Btn5U] && enableClaw) { //If button 5U is pressed and enable claw has a non-zero value
