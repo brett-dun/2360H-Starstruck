@@ -60,6 +60,17 @@ void cube(bool leftStart) {
 
 	startTask(raiseForklift);
 	driveInches(55);
+	motor[backLeft] = 128;
+	motor[frontLeft] = 128;
+	motor[backRight] = 128;
+	motor[frontRight] = 128;
+
+	delay(500);
+
+	motor[backLeft] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontRight] = 0;
 	openClaw(); //Drop stars
 }
 
@@ -69,7 +80,9 @@ void backStars(bool leftStart) {
 	openClaw();
 	delay(500);
 	startTask(maintainForkliftDown);
-	driveInches(45);
+	driveInches(22.5);
+	startTask(maintainForkliftDown);
+	driveInches(22.5);
 	closeClaw();
 	delay(100);
 	driveInches(-45);
@@ -96,6 +109,7 @@ void backStars(bool leftStart) {
 
 	startTask(lowerForklift);
 	driveInches(6);
+	startTask(maintainForkliftDown);
 	delay(1200);
 	closeClaw();
 	delay(200);

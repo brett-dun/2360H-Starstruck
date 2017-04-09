@@ -86,73 +86,46 @@ void squareRobot() {
 
 }
 
+
 /*
 	angle > 0 >>> clockwise
 	angle < 0 >>> counterclockwise
 */
-/*void turnDegrees(float angle){
- // 14.5, 15, diameter = 20.86, 1 tick = 0.1431 degrees
-	nMotorEncoder[backLeft] = 0;
-	nMotorEncoder[frontLeft] = 0;
-	nMotorEncoder[backRight] = 0;
-	nMotorEncoder[frontRight] = 0;
 
-	float desiredTicks = angle/0.14308;
+void turnDegrees(float angle){
 
-	while(abs(nMotorEncoder[backLeft]) < desiredTicks) {
-		motor[backLeft] = 5 + 64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[backLeft])));
-		motor[frontLeft] = 5 + 64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[frontLeft])));
-		motor[backRight] = -5 -64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[backRight])));
-		motor[frontRight] = -5 -64 * atan(0.00125 * (desiredTicks-abs(nMotorEncoder[frontRight])));
-	}
+	bool rightTurn = angle < 0;
 
-	motor[backLeft] = 0;
-	motor[frontLeft] = 0;
-	motor[backRight] = 0;
-	motor[frontRight] = 0;
+	float initial = abs(SensorValue[in1]);
+	float absGyroValue = abs(SensorValue[in1]/10.0);
 
-
-/*	nMotorEncoder[backLeft] = 0;
-	nMotorEncoder[frontLeft] = 0;
-	nMotorEncoder[backRight] = 0;
-	nMotorEncoder[frontRight] = 0;
-
-	const float max = angle < 0 ? -64 : 64;
-	const float ticks = abs(angle / 360.0) * (sqrt(pow(15.125,2) + pow(14,2))) / WHEEL_DIAMETER *  392;
-																						// 11.5^2 + 14.75^2 = c^2
-
-	float leftAverage = 0;
-	float rightAverage = 0;
-	float total = 0;
-	float speed = 0;
-	float leftSpeed = 0;
-	float rightSpeed = 0;
-
-	motor[backLeft] = max;
-	motor[frontLeft] = max;
-	motor[backRight] = -max;
-	motor[frontRight] = -max;
+	float leftSpeed = rightTurn ? 80 : -80;
+	float rightSpeed = rightTurn ? -80 : 80;
 
 	do {
+		motor[backLeft] = leftSpeed * atan(0.1 * abs(angle - gyroValue));
+		motor[frontLeft] = leftSpeed * atan(0.1 * abs(angle - gyroValue));
+		motor[backRight] = rightSpeed * atan(0.1 * abs(angle - gyroValue));
+		motor[frontRight] = rightSpeed * atan(0.1 * abs(angle - gyroValue));
+		absGyroValue = abs(SensorValue[in1]/10.0);
+	} while(abs(absGyroValue-initial) < abs(angle) );
 
-		leftAverage = ( abs(nMotorEncoder[backLeft]) + abs(nMotorEncoder[frontLeft]) ) / 2.0;
-		rightAverage = ( abs(nMotorEncoder[backRight]) + abs(nMotorEncoder[frontRight]) ) / 2.0;
 
-		leftSpeed = -atan( abs(ticks - leftAverage) / 64.0 ) / (PI/2) * max;//-(atan(0.5 *(ticks - leftAverage)) / (PI/2) * max + speed);
-		rightSpeed = atan( abs(ticks - leftAverage) / 64.0 ) / (PI/2) * max;//atan(0.5 *(ticks - rightAverage)) / (PI/2) * max + speed;
 
-		motor[backLeft] = leftSpeed;
-		motor[frontLeft] = leftSpeed;
-		motor[backRight] = rightSpeed;
-		motor[frontRight] = rightSpeed;
+	motor[backLeft] = rightTurn ? -128: 128;
+	motor[frontLeft] = rightTurn ? -128: 128;
+	motor[backRight] = rightTurn ? 128: -128;
+	motor[frontRight] = rightTurn ? 128: -128;
 
-	}	while(leftAverage < ticks || rightAverage < ticks);
+	delay(100);
 
 	motor[backLeft] = 0;
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[frontRight] = 0;
-}*/
+
+
+}
 
 /*
 	angle > 0 >>> clockwise

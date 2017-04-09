@@ -30,10 +30,6 @@
 //Supporting Files
 #include <BaseFunctions.c>
 #include <Autonomous.c>
-//#include <Recorder.c>
-//#include <Playback.c>
-
-const int forkliftDownSpeed = -100;
 
 
 //Variables
@@ -101,15 +97,8 @@ void pre_auton() {
 
 
 task autonomous() {
-	//skills();
+
 	SensorValue[sixBar] = 0;
-	/*delay(3000);
-	while(true) {
-		startTask(raiseForklift);
-		delay(4000);
-		startTask(lowerForklift);
-		delay(4000);
-	}*/
 
 	//Clear the LCD
 	clearLCDLine(0);
@@ -163,8 +152,6 @@ task autonomous() {
 */
 task usercontrol() {
 
-	//startTask(record); //Begin recording an autonomous or programming skills run
-
 	clearTimer(T1); //Clear the timer
 
 	//Clear the LCD
@@ -202,9 +189,7 @@ task usercontrol() {
 				speed = -64;
 			} else {
 				speed = -32;
-			} /*else {
-				speed = 0;
-			}*/
+			}
 		} else {
 			speed = 0;
 		}
